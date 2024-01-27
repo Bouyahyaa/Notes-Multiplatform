@@ -48,19 +48,16 @@ fun App() {
                 title = "Home",
                 selectedIcon = Icons.Default.Home,
                 unselectedIcon = Icons.Outlined.Home,
-                hasNews = false,
             ),
             NavigationItem(
                 title = "Profile",
                 selectedIcon = Icons.Filled.Person,
                 unselectedIcon = Icons.Outlined.Person,
-                hasNews = true,
             ),
             NavigationItem(
                 title = "Settings",
                 selectedIcon = Icons.Filled.Settings,
                 unselectedIcon = Icons.Outlined.Settings,
-                hasNews = false,
             ),
         )
 

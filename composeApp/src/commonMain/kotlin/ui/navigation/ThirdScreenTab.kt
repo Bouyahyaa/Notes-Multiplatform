@@ -20,7 +20,7 @@ object ThirdScreenTab : Tab {
         get() {
             val icon = rememberVectorPainter(Icons.Default.Settings)
             val title = "ThirdScreen"
-            val index: UShort = 0u
+            val index: UShort = 2u
 
             return TabOptions(
                 index, title, icon

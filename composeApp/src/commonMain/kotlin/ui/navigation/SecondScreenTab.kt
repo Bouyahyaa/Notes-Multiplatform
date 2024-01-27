@@ -20,7 +20,7 @@ object SecondScreenTab : Tab {
         get() {
             val icon = rememberVectorPainter(Icons.Default.Person)
             val title = "SecondScreen"
-            val index: UShort = 0u
+            val index: UShort = 1u
 
             return TabOptions(
                 index, title, icon

@@ -1,4 +1,4 @@
-package com.bouyahya.ahadith
+package com.bouyahya.notes
 
 import App
 import android.os.Bundle

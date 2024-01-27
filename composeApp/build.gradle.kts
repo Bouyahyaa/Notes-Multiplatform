@@ -57,7 +57,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.bouyahya.ahadith"
+    namespace = "com.bouyahya.notes"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -65,7 +65,7 @@ android {
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        applicationId = "com.bouyahya.ahadith"
+        applicationId = "com.bouyahya.notes"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
@@ -96,7 +96,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.bouyahya.ahadith"
+            packageName = "com.bouyahya.notes"
             packageVersion = "1.0.0"
         }
     }
