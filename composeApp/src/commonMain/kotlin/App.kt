@@ -47,16 +47,19 @@ fun App() {
                 title = "Home",
                 selectedIcon = Icons.Default.Home,
                 unselectedIcon = Icons.Outlined.Home,
+                tab = FirstScreenTab
             ),
             NavigationItem(
                 title = "Profile",
                 selectedIcon = Icons.Filled.Person,
                 unselectedIcon = Icons.Outlined.Person,
+                tab = SecondScreenTab
             ),
             NavigationItem(
                 title = "Settings",
                 selectedIcon = Icons.Filled.Settings,
                 unselectedIcon = Icons.Outlined.Settings,
+                tab = ThirdScreenTab
             ),
         )
 
@@ -75,18 +78,16 @@ fun App() {
                         contentColor = contentColorFor(Color.Red),
                         elevation = 8.dp
                     ) {
-                        val firstTabIndex = FirstScreenTab.options.index
-                        val secondTabIndex = SecondScreenTab.options.index
-                        val thirdTabIndex = ThirdScreenTab.options.index
-                        TabItem(FirstScreenTab, tabNavigator, onTabChanged = {
-                            selectedItemIndex = firstTabIndex.toInt()
-                        })
-                        TabItem(SecondScreenTab, tabNavigator, onTabChanged = {
-                            selectedItemIndex = secondTabIndex.toInt()
-                        })
-                        TabItem(ThirdScreenTab, tabNavigator, onTabChanged = {
-                            selectedItemIndex = thirdTabIndex.toInt()
-                        })
+                        items.map { navigationItem ->
+                            val index = navigationItem.tab.options.index.toInt()
+                            TabItem(
+                                tab = navigationItem.tab,
+                                tabNavigator = tabNavigator,
+                                onTabChanged = {
+                                    selectedItemIndex = index
+                                }
+                            )
+                        }
                     }
 
                 }) {
@@ -125,36 +126,12 @@ fun App() {
                     modifier = Modifier.fillMaxSize()
                         .padding(start = 80.dp)
                 ) {
-                    when (selectedItemIndex) {
-                        0 -> {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(androidx.compose.material3.MaterialTheme.colorScheme.background)
-                            ) {
-                                TabNavigator(FirstScreenTab)
-                            }
-                        }
-
-                        1 -> {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(androidx.compose.material3.MaterialTheme.colorScheme.background)
-                            ) {
-                                TabNavigator(SecondScreenTab)
-                            }
-                        }
-
-                        2 -> {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(androidx.compose.material3.MaterialTheme.colorScheme.background)
-                            ) {
-                                TabNavigator(ThirdScreenTab)
-                            }
-                        }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(androidx.compose.material3.MaterialTheme.colorScheme.background)
+                    ) {
+                        CurrentTab()
                     }
                 }
             }
