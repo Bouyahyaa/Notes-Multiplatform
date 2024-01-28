@@ -30,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.tab.CurrentTab
-import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import ui.navigation.FirstScreenTab
@@ -68,64 +67,93 @@ fun App() {
         }
 
         TabNavigator(FirstScreenTab) { tabNavigator ->
-            Scaffold(bottomBar = {
-                if (!showNavigationRail) {
+            if (!showNavigationRail) {
+                Scaffold(bottomBar = {
                     BottomNavigation(
                         modifier = Modifier.fillMaxWidth().windowInsetsPadding(WindowInsets.ime),
                         backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.background,
                         contentColor = contentColorFor(Color.Red),
                         elevation = 8.dp
                     ) {
-                        TabItem(FirstScreenTab)
-                        TabItem(SecondScreenTab)
-                        TabItem(ThirdScreenTab)
+                        val firstTabIndex = FirstScreenTab.options.index
+                        val secondTabIndex = SecondScreenTab.options.index
+                        val thirdTabIndex = ThirdScreenTab.options.index
+                        TabItem(FirstScreenTab, tabNavigator, onTabChanged = {
+                            selectedItemIndex = firstTabIndex.toInt()
+                        })
+                        TabItem(SecondScreenTab, tabNavigator, onTabChanged = {
+                            selectedItemIndex = secondTabIndex.toInt()
+                        })
+                        TabItem(ThirdScreenTab, tabNavigator, onTabChanged = {
+                            selectedItemIndex = thirdTabIndex.toInt()
+                        })
+                    }
+
+                }) {
+                    Column(
+                        modifier = Modifier.fillMaxSize().padding(
+                            bottom = it.calculateBottomPadding(),
+                            start = if (showNavigationRail) 80.dp else 0.dp
+                        )
+                    ) {
+                        CurrentTab()
                     }
                 }
-            }) {
-                Column(
-                    modifier = Modifier.fillMaxSize().padding(
-                        bottom = it.calculateBottomPadding(),
-                        start = if (showNavigationRail) 80.dp else 0.dp
-                    )
-                ) {
-                    CurrentTab()
-                }
-            }
-        }
+            } else {
+                NavigationSideBar(
+                    items = items,
+                    selectedItemIndex = selectedItemIndex,
+                    onNavigate = {
+                        selectedItemIndex = it
+                        when (selectedItemIndex) {
+                            0 -> {
+                                tabNavigator.current = FirstScreenTab
+                            }
 
-        if (showNavigationRail) {
-            NavigationSideBar(
-                items = items,
-                selectedItemIndex = selectedItemIndex,
-                onNavigate = {
-                    selectedItemIndex = it
-                }
-            )
+                            1 -> {
+                                tabNavigator.current = SecondScreenTab
+                            }
 
-            Box(
-                modifier = Modifier.fillMaxSize()
-                    .padding(start = 80.dp)
-            ) {
-                when (selectedItemIndex) {
-                    0 -> {}
-
-                    1 -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(androidx.compose.material3.MaterialTheme.colorScheme.background)
-                        ) {
-                            TabNavigator(SecondScreenTab)
+                            2 -> {
+                                tabNavigator.current = ThirdScreenTab
+                            }
                         }
                     }
+                )
 
-                    2 -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(androidx.compose.material3.MaterialTheme.colorScheme.background)
-                        ) {
-                            TabNavigator(ThirdScreenTab)
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                        .padding(start = 80.dp)
+                ) {
+                    when (selectedItemIndex) {
+                        0 -> {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(androidx.compose.material3.MaterialTheme.colorScheme.background)
+                            ) {
+                                TabNavigator(FirstScreenTab)
+                            }
+                        }
+
+                        1 -> {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(androidx.compose.material3.MaterialTheme.colorScheme.background)
+                            ) {
+                                TabNavigator(SecondScreenTab)
+                            }
+                        }
+
+                        2 -> {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(androidx.compose.material3.MaterialTheme.colorScheme.background)
+                            ) {
+                                TabNavigator(ThirdScreenTab)
+                            }
                         }
                     }
                 }
@@ -135,14 +163,14 @@ fun App() {
 }
 
 @Composable
-fun RowScope.TabItem(tab: Tab) {
-    val tabNavigator = LocalTabNavigator.current
+fun RowScope.TabItem(tab: Tab, tabNavigator: TabNavigator, onTabChanged: () -> Unit) {
     BottomNavigationItem(
         modifier = Modifier.background(androidx.compose.material3.MaterialTheme.colorScheme.surface)
             .height(58.dp).clip(RoundedCornerShape(16.dp)),
         selected = tabNavigator.current == tab,
         onClick = {
             tabNavigator.current = tab
+            onTabChanged()
         },
         icon = {
             tab.options.icon?.let { painter ->

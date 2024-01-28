@@ -19,7 +19,7 @@ object FirstScreenTab : Tab {
         @Composable
         get() {
             val icon = rememberVectorPainter(Icons.Default.Home)
-            val title = "FirstScreen"
+            val title = "Home"
             val index: UShort = 0u
 
             return TabOptions(

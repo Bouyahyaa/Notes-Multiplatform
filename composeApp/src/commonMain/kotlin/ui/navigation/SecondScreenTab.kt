@@ -19,7 +19,7 @@ object SecondScreenTab : Tab {
         @Composable
         get() {
             val icon = rememberVectorPainter(Icons.Default.Person)
-            val title = "SecondScreen"
+            val title = "Profile"
             val index: UShort = 1u
 
             return TabOptions(

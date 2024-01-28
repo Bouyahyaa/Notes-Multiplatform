@@ -19,7 +19,7 @@ object ThirdScreenTab : Tab {
         @Composable
         get() {
             val icon = rememberVectorPainter(Icons.Default.Settings)
-            val title = "ThirdScreen"
+            val title = "Settings"
             val index: UShort = 2u
 
             return TabOptions(
