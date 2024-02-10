@@ -42,18 +42,22 @@ kotlin {
             @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
             implementation(compose.material3)
-            implementation(libs.voyager.navigator)
-            implementation(libs.voyager.transitions)
-            implementation(libs.voyager.tab.navigator)
             implementation(libs.screen.size)
             implementation(libs.kotlin.coroutine)
             implementation(libs.sqldelight.runtime)
+            implementation(libs.koin.core)
+            with(libs.voyager) {
+                implementation(navigator)
+                implementation(transitions)
+                implementation(tab.navigator)
+                implementation(screen.model)
+                implementation(koin)
+            }
             with(libs.ktor) {
                 implementation(core)
                 implementation(content.negotiation)
                 implementation(serialization)
             }
-            implementation(libs.koin.core)
         }
 
         androidMain.dependencies {
@@ -74,6 +78,7 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.sqldelight.sqlite)
+            implementation(libs.kotlinx.coroutines.swing)
         }
     }
 }

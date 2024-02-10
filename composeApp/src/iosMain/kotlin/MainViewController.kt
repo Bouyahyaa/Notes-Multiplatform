@@ -1,15 +1,10 @@
 import androidx.compose.ui.window.ComposeUIViewController
 import com.bouyahya.notes.App
-import com.bouyahya.notes.core.di.appModule
-import org.koin.core.context.startKoin
+import com.bouyahya.notes.core.di.initKoin
 import platform.UIKit.UIViewController
 
 fun MainViewController(): UIViewController {
-
-    startKoin {
-        modules(appModule)
-    }
-
+    initKoin()
     return ComposeUIViewController {
         App()
     }

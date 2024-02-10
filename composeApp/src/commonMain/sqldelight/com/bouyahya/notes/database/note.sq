@@ -8,6 +8,11 @@ getAllNotes:
 SELECT *
 FROM NoteEntity;
 
+getNote:
+SELECT *
+FROM NoteEntity
+WHERE id == :id;
+
 insertNote:
 INSERT OR REPLACE
 INTO NoteEntity(
