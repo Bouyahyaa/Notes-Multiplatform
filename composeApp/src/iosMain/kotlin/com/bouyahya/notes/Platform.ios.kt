@@ -1,3 +1,5 @@
+package com.bouyahya.notes
+
 import platform.UIKit.UIDevice
 
 class IOSPlatform: Platform {

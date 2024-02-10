@@ -1,4 +1,4 @@
-package ui.screens
+package com.bouyahya.notes.features.notes.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,14 +8,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 
-class SecondScreen : Screen {
+class NotesScreen : Screen {
     @Composable
     override fun Content() {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "Second Screen")
+            Text(text = "Notes Screen")
         }
     }
 }

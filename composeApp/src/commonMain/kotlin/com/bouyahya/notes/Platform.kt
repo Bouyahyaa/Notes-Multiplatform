@@ -1,3 +1,5 @@
+package com.bouyahya.notes
+
 interface Platform {
     val name: String
 }

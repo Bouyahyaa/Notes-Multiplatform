@@ -1,3 +1,5 @@
+package com.bouyahya.notes
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -9,10 +11,8 @@ import androidx.compose.material.contentColorFor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -32,11 +32,10 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
-import ui.navigation.FirstScreenTab
-import ui.navigation.SecondScreenTab
-import ui.navigation.ThirdScreenTab
-import ui.navigation.rails.NavigationItem
-import ui.navigation.rails.NavigationSideBar
+import com.bouyahya.notes.features.notes.ui.NotesScreenTab
+import com.bouyahya.notes.features.profile.ui.ProfileScreenTab
+import com.bouyahya.notes.core.navigation.rails.NavigationItem
+import com.bouyahya.notes.core.navigation.rails.NavigationSideBar
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
@@ -47,20 +46,14 @@ fun App() {
                 title = "Home",
                 selectedIcon = Icons.Default.Home,
                 unselectedIcon = Icons.Outlined.Home,
-                tab = FirstScreenTab
+                tab = NotesScreenTab
             ),
             NavigationItem(
                 title = "Profile",
                 selectedIcon = Icons.Filled.Person,
                 unselectedIcon = Icons.Outlined.Person,
-                tab = SecondScreenTab
-            ),
-            NavigationItem(
-                title = "Settings",
-                selectedIcon = Icons.Filled.Settings,
-                unselectedIcon = Icons.Outlined.Settings,
-                tab = ThirdScreenTab
-            ),
+                tab = ProfileScreenTab
+            )
         )
 
         val windowClass = calculateWindowSizeClass()
@@ -69,7 +62,7 @@ fun App() {
             mutableStateOf(0)
         }
 
-        TabNavigator(FirstScreenTab) { tabNavigator ->
+        TabNavigator(NotesScreenTab) { tabNavigator ->
             if (!showNavigationRail) {
                 Scaffold(bottomBar = {
                     BottomNavigation(
@@ -108,15 +101,11 @@ fun App() {
                         selectedItemIndex = it
                         when (selectedItemIndex) {
                             0 -> {
-                                tabNavigator.current = FirstScreenTab
+                                tabNavigator.current = NotesScreenTab
                             }
 
                             1 -> {
-                                tabNavigator.current = SecondScreenTab
-                            }
-
-                            2 -> {
-                                tabNavigator.current = ThirdScreenTab
+                                tabNavigator.current = ProfileScreenTab
                             }
                         }
                     }

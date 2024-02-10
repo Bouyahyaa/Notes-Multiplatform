@@ -1,4 +1,4 @@
-package ui.screens
+package com.bouyahya.notes.features.profile.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,14 +8,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 
-class FirstScreen : Screen {
+class ProfileScreen : Screen {
     @Composable
     override fun Content() {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "First Screen")
+            Text(text = "Profile Screen")
         }
     }
 }

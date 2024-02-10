@@ -1,4 +1,4 @@
-package ui.navigation.rails
+package com.bouyahya.notes.core.navigation.rails
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import cafe.adriel.voyager.navigator.tab.Tab

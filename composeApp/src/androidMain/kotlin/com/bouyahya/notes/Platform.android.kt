@@ -1,3 +1,5 @@
+package com.bouyahya.notes
+
 import android.os.Build
 
 class AndroidPlatform : Platform {
