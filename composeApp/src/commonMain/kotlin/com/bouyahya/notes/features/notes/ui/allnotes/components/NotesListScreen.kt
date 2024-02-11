@@ -44,6 +44,7 @@ fun NotesListScreen(notesList: List<Note>) {
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun NotesList(notesList: List<Note>) {
     if (notesList.isEmpty()) {
@@ -54,48 +55,48 @@ fun NotesList(notesList: List<Note>) {
             )
         }
     } else {
-        LazyColumn {
+        LazyColumn(
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Top
+        ) {
             items(notesList) { note ->
-                NoteListItem(note = note)
+                ListItem(
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Edit",
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(MaterialTheme.colors.secondaryVariant, CircleShape)
+                                .padding(8.dp)
+                        )
+                    },
+                    trailing = {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete",
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(MaterialTheme.colors.error, CircleShape)
+                                .padding(8.dp)
+                        )
+                    },
+                    text = {
+                        Text(
+                            text = note.title,
+                            textAlign = TextAlign.Start,
+                            style = MaterialTheme.typography.body1
+                        )
+                    },
+                    secondaryText = {
+                        Text(
+                            text = note.description,
+                            textAlign = TextAlign.Start,
+                            style = MaterialTheme.typography.body1
+                        )
+                    }
+                )
             }
         }
-    }
-}
-
-@Composable
-fun NoteListItem(note: Note) {
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        Icon(
-            imageVector = Icons.Default.Edit,
-            contentDescription = "Edit",
-            modifier = Modifier
-                .size(40.dp)
-                .background(
-                    MaterialTheme.colors.secondaryVariant,
-                    CircleShape
-                )
-                .padding(8.dp)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = note.title,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.body1
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Icon(
-            imageVector = Icons.Default.Delete,
-            contentDescription = "Delete",
-            modifier = Modifier
-                .size(40.dp)
-                .background(MaterialTheme.colors.error, CircleShape)
-                .padding(8.dp)
-        )
     }
 }
