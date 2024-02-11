@@ -22,12 +22,22 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.bouyahya.notes.core.utils.ValidationEvent
+import org.koin.core.parameter.parametersOf
 
-class AddEditNoteScreen : Screen {
+class AddEditNoteScreen(
+    val id: Long? = null
+) : Screen {
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     override fun Content() {
-        val viewModel = getScreenModel<AddEditNoteViewModel>()
+        val viewModel = getScreenModel<AddEditNoteViewModel>(
+            parameters = {
+                parametersOf(
+                    "noteId" to id,
+                )
+            },
+        )
+
         val state by viewModel.state.collectAsState()
         val note = state.note.value
         val scaffoldState: ScaffoldState = rememberScaffoldState()
@@ -142,7 +152,9 @@ class AddEditNoteScreen : Screen {
                         .height(50.dp)
                 ) {
                     Text(
-                        text = "Add note",
+                        text = if (id != null)
+                            "Edit Note" else
+                            "Add note",
                         color = Color.White
                     )
                 }

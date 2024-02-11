@@ -13,16 +13,50 @@ import kotlin.random.Random
 
 class AddEditNoteViewModel(
     private val noteRepository: NoteRepository,
-    val state: MutableStateFlow<AddEditNoteState> = MutableStateFlow(AddEditNoteState())
+    val state: MutableStateFlow<AddEditNoteState> = MutableStateFlow(AddEditNoteState()),
+    val noteId: Long?,
 ) : ScreenModel {
 
     private val validationEventChannel = Channel<ValidationEvent>()
     val validationEvents = validationEventChannel.receiveAsFlow()
 
+    init {
+        if (noteId != null) {
+            getNote()
+        }
+    }
+
     fun onEvent(event: AddEditNoteEvent) {
         when (event) {
             is AddEditNoteEvent.UpdateNoteFields -> updateNoteFields(event)
             is AddEditNoteEvent.Submit -> submit()
+        }
+    }
+
+    private fun getNote() {
+        screenModelScope.launch {
+            state.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
+            noteRepository
+                .getNoteById(noteId!!)
+                .onSuccess {
+                    state.value.note.value = it
+                }.onFailure {
+                    validationEventChannel.send(
+                        ValidationEvent.Failure(
+                            message = "Something went wrong!"
+                        )
+                    )
+                }
+        }.invokeOnCompletion {
+            state.update {
+                it.copy(
+                    isLoading = false
+                )
+            }
         }
     }
 
@@ -49,9 +83,9 @@ class AddEditNoteViewModel(
                 )
             }
             noteRepository.insertNote(
-                state.value.note.value.copy(
-                    id = Random.nextLong(0, 10000000L)
-                )
+                if (noteId == null)
+                    note.copy(id = Random.nextLong(0, 10000000L)) else
+                    note
             ).onSuccess {
                 validationEventChannel.send(ValidationEvent.Success)
             }.onFailure {

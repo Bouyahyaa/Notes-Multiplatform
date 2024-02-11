@@ -50,13 +50,19 @@ fun NotesListScreen(
             )
         },
     ) {
-        NotesList(notesList = notesList)
+        NotesList(
+            notesList = notesList,
+            navigator = navigator
+        )
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun NotesList(notesList: List<Note>) {
+fun NotesList(
+    notesList: List<Note>,
+    navigator: Navigator
+) {
     if (notesList.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(
@@ -73,7 +79,9 @@ fun NotesList(notesList: List<Note>) {
                 ListItem(
                     icon = {
                         IconButton(
-                            onClick = {},
+                            onClick = {
+                                navigator.push(AddEditNoteScreen(id = note.id))
+                            },
                             modifier = Modifier
                                 .background(
                                     MaterialTheme.colors.secondaryVariant,

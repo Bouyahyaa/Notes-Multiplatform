@@ -29,9 +29,11 @@ val noteModule
             )
         }
 
-        factory {
+        factory { parameters ->
+            val noteId = parameters.get<Pair<String, Long?>>(0).second
             AddEditNoteViewModel(
                 noteRepository = get(),
+                noteId = noteId
             )
         }
     }
