@@ -39,7 +39,10 @@ object NotesScreen : Screen {
             } else {
                 NotesListScreen(
                     notesList = state.noteList,
-                    navigator = navigator
+                    navigator = navigator,
+                    onEvent = {
+                        viewModel.onEvent(it)
+                    }
                 )
             }
         }

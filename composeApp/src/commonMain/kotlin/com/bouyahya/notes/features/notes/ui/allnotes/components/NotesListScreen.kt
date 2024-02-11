@@ -17,11 +17,13 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.Navigator
 import com.bouyahya.notes.features.notes.domain.Note
 import com.bouyahya.notes.features.notes.ui.addeditNote.AddEditNoteScreen
+import com.bouyahya.notes.features.notes.ui.allnotes.NotesEvent
 
 @Composable
 fun NotesListScreen(
     notesList: List<Note>,
     navigator: Navigator,
+    onEvent: (NotesEvent) -> Unit
 ) {
     Scaffold(
         backgroundColor = Color.Transparent,
@@ -52,7 +54,8 @@ fun NotesListScreen(
     ) {
         NotesList(
             notesList = notesList,
-            navigator = navigator
+            navigator = navigator,
+            onEvent = onEvent
         )
     }
 }
@@ -61,7 +64,8 @@ fun NotesListScreen(
 @Composable
 fun NotesList(
     notesList: List<Note>,
-    navigator: Navigator
+    navigator: Navigator,
+    onEvent: (NotesEvent) -> Unit
 ) {
     if (notesList.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -96,7 +100,9 @@ fun NotesList(
                     },
                     trailing = {
                         IconButton(
-                            onClick = {},
+                            onClick = {
+                                onEvent(NotesEvent.DeleteNote(note.id))
+                            },
                             modifier = Modifier
                                 .background(
                                     MaterialTheme.colors.error,

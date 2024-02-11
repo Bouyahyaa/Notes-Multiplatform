@@ -14,6 +14,7 @@ class NotesViewModel(
     fun onEvent(event: NotesEvent) {
         when (event) {
             is NotesEvent.GetAllNotes -> getNotes()
+            is NotesEvent.DeleteNote -> deleteNote(event)
         }
     }
 
@@ -27,14 +28,12 @@ class NotesViewModel(
             noteRepository
                 .getAllNotes()
                 .onSuccess { notes ->
-                    println("noteRepositoryOnSuccess $notes")
                     state.update {
                         it.copy(
                             noteList = notes
                         )
                     }
                 }.onFailure { throwable ->
-                    println("noteRepositoryOnFailure $throwable")
                     state.update {
                         it.copy(
                             error = "Something went wrong!"
@@ -47,6 +46,22 @@ class NotesViewModel(
                     isLoading = false
                 )
             }
+        }
+    }
+
+    private fun deleteNote(event: NotesEvent.DeleteNote) {
+        screenModelScope.launch {
+            noteRepository
+                .deleteNote(event.noteId)
+                .onSuccess {
+                    state.update {
+                        it.copy(
+                            noteList = state.value.noteList.filter { note ->
+                                note.id != event.noteId
+                            }
+                        )
+                    }
+                }
         }
     }
 }
