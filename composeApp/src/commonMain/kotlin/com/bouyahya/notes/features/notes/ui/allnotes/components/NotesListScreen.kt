@@ -8,7 +8,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,18 +36,22 @@ fun NotesListScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
+                backgroundColor = MaterialTheme.colors.secondaryVariant,
                 onClick = {
                     navigator.push(AddEditNoteScreen())
                 },
                 content = {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add",
+                        tint = Color.White
+                    )
                 }
             )
         },
-        content = {
-            NotesList(notesList = notesList)
-        }
-    )
+    ) {
+        NotesList(notesList = notesList)
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)

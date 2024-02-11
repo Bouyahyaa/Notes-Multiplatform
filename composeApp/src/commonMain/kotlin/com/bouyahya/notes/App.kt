@@ -68,7 +68,7 @@ fun App() {
                     BottomNavigation(
                         modifier = Modifier.fillMaxWidth().windowInsetsPadding(WindowInsets.ime),
                         backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.background,
-                        contentColor = contentColorFor(Color.Red),
+                        contentColor = contentColorFor(MaterialTheme.colors.secondaryVariant),
                         elevation = 8.dp
                     ) {
                         items.map { navigationItem ->
@@ -131,7 +131,7 @@ fun RowScope.TabItem(tab: Tab, tabNavigator: TabNavigator, onTabChanged: () -> U
                 Icon(
                     painter,
                     contentDescription = tab.options.title,
-                    tint = if (tabNavigator.current == tab) Color.Red else Color.Black
+                    tint = if (tabNavigator.current == tab) MaterialTheme.colors.secondaryVariant else Color.Black
                 )
             }
         },
@@ -140,14 +140,14 @@ fun RowScope.TabItem(tab: Tab, tabNavigator: TabNavigator, onTabChanged: () -> U
                 Text(
                     title,
                     fontSize = 12.sp,
-                    color = if (tabNavigator.current == tab) Color.Red else Color.Black
+                    color = if (tabNavigator.current == tab) MaterialTheme.colors.secondaryVariant else Color.Black
                 )
             }
         },
         enabled = true,
         alwaysShowLabel = true,
         interactionSource = MutableInteractionSource(),
-        selectedContentColor = Color.Red,
+        selectedContentColor = MaterialTheme.colors.secondaryVariant,
         unselectedContentColor = Color.Black
     )
 }
