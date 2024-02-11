@@ -13,7 +13,7 @@ class NoteLocalDataSourceImpl(
             .executeAsList()
     }
 
-    override suspend fun getNoteById(id: String): NoteEntity {
+    override suspend fun getNoteById(id: Long): NoteEntity {
         return queries
             .getNote(id)
             .executeAsOne()
@@ -23,7 +23,7 @@ class NoteLocalDataSourceImpl(
         queries.insertNote(note)
     }
 
-    override suspend fun deleteNote(id: String) {
+    override suspend fun deleteNote(id: Long) {
         queries.deleteNote(id)
     }
 }

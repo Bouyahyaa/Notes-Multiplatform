@@ -1,5 +1,5 @@
 CREATE TABLE NoteEntity(
-    id TEXT NOT NULL PRIMARY KEY,
+    id INTEGER NOT NULL PRIMARY KEY,
     title TEXT,
     description TEXT
 );

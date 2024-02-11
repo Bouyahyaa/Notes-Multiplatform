@@ -16,7 +16,7 @@ class NoteRepositoryImpl(
                 .map { it.toNote() }
         }
 
-    override suspend fun getNoteById(id: String): Result<Note> =
+    override suspend fun getNoteById(id: Long): Result<Note> =
         runCatching {
             noteLocalDataSource
                 .getNoteById(id)
@@ -30,7 +30,7 @@ class NoteRepositoryImpl(
         }
 
 
-    override suspend fun deleteNote(id: String): Result<Unit> =
+    override suspend fun deleteNote(id: Long): Result<Unit> =
         runCatching {
             noteLocalDataSource
                 .deleteNote(id)

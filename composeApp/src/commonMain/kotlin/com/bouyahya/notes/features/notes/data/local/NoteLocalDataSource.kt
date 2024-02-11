@@ -4,7 +4,7 @@ import com.bouyahya.notes.database.NoteEntity
 
 interface NoteLocalDataSource {
     suspend fun getAllNotes(): List<NoteEntity>
-    suspend fun getNoteById(id: String): NoteEntity
+    suspend fun getNoteById(id: Long): NoteEntity
     suspend fun insertNote(note: NoteEntity)
-    suspend fun deleteNote(id: String)
+    suspend fun deleteNote(id: Long)
 }
