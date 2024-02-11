@@ -18,20 +18,32 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.bouyahya.notes.core.utils.ValidationEvent
 
 class AddEditNoteScreen : Screen {
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     override fun Content() {
-        var title by remember { mutableStateOf("") }
-        var description by remember { mutableStateOf("") }
-
+        val viewModel = getScreenModel<AddEditNoteViewModel>()
+        val state by viewModel.state.collectAsState()
+        val note = state.note.value
 
         val focusManager = LocalFocusManager.current
         val keyboardController = LocalSoftwareKeyboardController.current
         val navigator = LocalNavigator.currentOrThrow
+
+        LaunchedEffect(key) {
+            viewModel.validationEvents.collect { state ->
+                if (state == ValidationEvent.Success) {
+                    navigator.pop()
+                } else {
+                    println("Error")
+                }
+            }
+        }
 
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
@@ -58,8 +70,16 @@ class AddEditNoteScreen : Screen {
 
             // Title TextField
             OutlinedTextField(
-                value = title,
-                onValueChange = { title = it },
+                value = note.title,
+                onValueChange = {
+                    viewModel.onEvent(
+                        AddEditNoteEvent.UpdateNoteFields(
+                            note.copy(
+                                title = it
+                            )
+                        )
+                    )
+                },
                 label = { Text("Title") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -74,8 +94,16 @@ class AddEditNoteScreen : Screen {
 
             // Description TextField
             OutlinedTextField(
-                value = description,
-                onValueChange = { description = it },
+                value = note.description,
+                onValueChange = {
+                    viewModel.onEvent(
+                        AddEditNoteEvent.UpdateNoteFields(
+                            note.copy(
+                                description = it
+                            )
+                        )
+                    )
+                },
                 label = { Text("Description") },
                 minLines = 10,
                 modifier = Modifier
@@ -87,7 +115,7 @@ class AddEditNoteScreen : Screen {
                 keyboardActions = KeyboardActions(
                     onDone = {
                         keyboardController?.hide()
-                        // Handle submit logic here
+                        focusManager.clearFocus()
                     }
                 )
             )
@@ -95,7 +123,7 @@ class AddEditNoteScreen : Screen {
             // Submit Button
             Button(
                 onClick = {
-                    // Handle submit logic here
+                    viewModel.onEvent(AddEditNoteEvent.Submit)
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.secondaryVariant
