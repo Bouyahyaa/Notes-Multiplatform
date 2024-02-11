@@ -123,8 +123,10 @@ class AddEditNoteScreen : Screen {
             // Submit Button
             Button(
                 onClick = {
-                    viewModel.onEvent(AddEditNoteEvent.Submit)
+                    if (!state.isLoading)
+                        viewModel.onEvent(AddEditNoteEvent.Submit)
                 },
+                enabled = !state.isLoading,
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = MaterialTheme.colors.secondaryVariant
                 ),

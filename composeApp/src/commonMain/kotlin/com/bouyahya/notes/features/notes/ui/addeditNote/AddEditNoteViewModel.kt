@@ -7,6 +7,7 @@ import com.bouyahya.notes.features.notes.domain.NoteRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
@@ -31,6 +32,11 @@ class AddEditNoteViewModel(
 
     private fun submit() {
         screenModelScope.launch {
+            state.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
             noteRepository.insertNote(
                 state.value.note.value.copy(
                     id = Random.nextLong(0, 10000000L)
@@ -39,6 +45,12 @@ class AddEditNoteViewModel(
                 validationEventChannel.send(ValidationEvent.Success)
             }.onFailure {
                 validationEventChannel.send(ValidationEvent.Failure)
+            }
+        }.invokeOnCompletion {
+            state.update {
+                it.copy(
+                    isLoading = false
+                )
             }
         }
     }

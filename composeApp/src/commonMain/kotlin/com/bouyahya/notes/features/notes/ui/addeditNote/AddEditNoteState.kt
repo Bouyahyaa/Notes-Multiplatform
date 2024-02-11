@@ -6,4 +6,5 @@ import com.bouyahya.notes.features.notes.domain.Note
 
 data class AddEditNoteState(
     val note: MutableState<Note> = mutableStateOf(Note.default),
+    val isLoading: Boolean = false,
 )
