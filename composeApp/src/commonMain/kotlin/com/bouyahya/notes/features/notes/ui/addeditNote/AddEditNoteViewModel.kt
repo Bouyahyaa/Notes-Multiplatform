@@ -32,6 +32,17 @@ class AddEditNoteViewModel(
 
     private fun submit() {
         screenModelScope.launch {
+            val note = state.value.note.value
+
+            if (note.title.isEmpty() || note.description.isEmpty()) {
+                validationEventChannel.send(
+                    ValidationEvent.Failure(
+                        message = "Title and description are required"
+                    )
+                )
+                return@launch
+            }
+
             state.update {
                 it.copy(
                     isLoading = true
@@ -44,7 +55,11 @@ class AddEditNoteViewModel(
             ).onSuccess {
                 validationEventChannel.send(ValidationEvent.Success)
             }.onFailure {
-                validationEventChannel.send(ValidationEvent.Failure)
+                validationEventChannel.send(
+                    ValidationEvent.Failure(
+                        message = "Something went wrong!"
+                    )
+                )
             }
         }.invokeOnCompletion {
             state.update {

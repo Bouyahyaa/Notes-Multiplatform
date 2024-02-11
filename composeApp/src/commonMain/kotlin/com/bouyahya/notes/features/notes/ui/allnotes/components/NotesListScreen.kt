@@ -72,24 +72,34 @@ fun NotesList(notesList: List<Note>) {
             items(notesList) { note ->
                 ListItem(
                     icon = {
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = "Edit",
+                        IconButton(
+                            onClick = {},
                             modifier = Modifier
-                                .size(40.dp)
-                                .background(MaterialTheme.colors.secondaryVariant, CircleShape)
-                                .padding(8.dp)
-                        )
+                                .background(
+                                    MaterialTheme.colors.secondaryVariant,
+                                    CircleShape
+                                )
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Edit",
+                            )
+                        }
                     },
                     trailing = {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "Delete",
+                        IconButton(
+                            onClick = {},
                             modifier = Modifier
-                                .size(40.dp)
-                                .background(MaterialTheme.colors.error, CircleShape)
-                                .padding(8.dp)
-                        )
+                                .background(
+                                    MaterialTheme.colors.error,
+                                    CircleShape
+                                )
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Delete",
+                            )
+                        }
                     },
                     text = {
                         Text(

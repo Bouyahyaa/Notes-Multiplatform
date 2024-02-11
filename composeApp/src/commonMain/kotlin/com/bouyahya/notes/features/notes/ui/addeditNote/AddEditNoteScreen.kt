@@ -38,11 +38,10 @@ class AddEditNoteScreen : Screen {
 
         LaunchedEffect(key) {
             viewModel.validationEvents.collect { state ->
-                if (state == ValidationEvent.Success) {
-                    navigator.pop()
-                } else {
-                    scaffoldState.snackbarHostState.showSnackbar(
-                        message = "Something went wrong!",
+                when (state) {
+                    is ValidationEvent.Success -> navigator.pop()
+                    is ValidationEvent.Failure -> scaffoldState.snackbarHostState.showSnackbar(
+                        message = state.message,
                         actionLabel = "Dismiss"
                     )
                 }
