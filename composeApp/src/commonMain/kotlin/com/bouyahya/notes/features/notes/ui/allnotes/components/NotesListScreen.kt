@@ -15,10 +15,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.navigator.Navigator
 import com.bouyahya.notes.features.notes.domain.Note
+import com.bouyahya.notes.features.notes.ui.addeditNote.AddEditNoteScreen
 
 @Composable
-fun NotesListScreen(notesList: List<Note>) {
+fun NotesListScreen(
+    notesList: List<Note>,
+    navigator: Navigator,
+) {
     Scaffold(
         backgroundColor = Color.Transparent,
         topBar = {
@@ -32,7 +37,9 @@ fun NotesListScreen(notesList: List<Note>) {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* Handle add note click */ },
+                onClick = {
+                    navigator.push(AddEditNoteScreen())
+                },
                 content = {
                     Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
                 }

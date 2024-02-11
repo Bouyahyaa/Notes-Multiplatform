@@ -63,8 +63,8 @@ fun App() {
         }
 
         TabNavigator(NotesScreenTab) { tabNavigator ->
-            if (!showNavigationRail) {
-                Scaffold(bottomBar = {
+            Scaffold(bottomBar = {
+                if (!showNavigationRail) {
                     BottomNavigation(
                         modifier = Modifier.fillMaxWidth().windowInsetsPadding(WindowInsets.ime),
                         backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.background,
@@ -82,18 +82,19 @@ fun App() {
                             )
                         }
                     }
-
-                }) {
-                    Column(
-                        modifier = Modifier.fillMaxSize().padding(
-                            bottom = it.calculateBottomPadding(),
-                            start = if (showNavigationRail) 80.dp else 0.dp
-                        )
-                    ) {
-                        CurrentTab()
-                    }
                 }
-            } else {
+            }) {
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(
+                        bottom = it.calculateBottomPadding(),
+                        start = if (showNavigationRail) 80.dp else 0.dp
+                    )
+                ) {
+                    CurrentTab()
+                }
+            }
+
+            if (showNavigationRail) {
                 NavigationSideBar(
                     items = items,
                     selectedItemIndex = selectedItemIndex,
@@ -110,19 +111,6 @@ fun App() {
                         }
                     }
                 )
-
-                Box(
-                    modifier = Modifier.fillMaxSize()
-                        .padding(start = 80.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(androidx.compose.material3.MaterialTheme.colorScheme.background)
-                    ) {
-                        CurrentTab()
-                    }
-                }
             }
         }
     }

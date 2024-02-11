@@ -12,11 +12,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.bouyahya.notes.features.notes.ui.allnotes.components.NotesListScreen
 
 object NotesScreen : Screen {
     @Composable
     override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
 
         val viewModel = getScreenModel<NotesViewModel>()
         val state by viewModel.state.collectAsState()
@@ -34,7 +37,10 @@ object NotesScreen : Screen {
             } else if (state.error.isNotEmpty()) {
                 Text(text = state.error)
             } else {
-                NotesListScreen(state.noteList)
+                NotesListScreen(
+                    notesList = state.noteList,
+                    navigator = navigator
+                )
             }
         }
     }
