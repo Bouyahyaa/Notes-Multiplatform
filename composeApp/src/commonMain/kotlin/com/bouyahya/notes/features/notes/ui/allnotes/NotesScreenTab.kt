@@ -11,7 +11,7 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 object NotesScreenTab : Tab {
     @Composable
     override fun Content() {
-        Navigator(NotesScreen())
+        Navigator(NotesScreen)
     }
 
     override val options: TabOptions

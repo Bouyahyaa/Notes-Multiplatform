@@ -14,7 +14,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import com.bouyahya.notes.features.notes.ui.allnotes.components.NotesListScreen
 
-class NotesScreen : Screen {
+object NotesScreen : Screen {
     @Composable
     override fun Content() {
 
