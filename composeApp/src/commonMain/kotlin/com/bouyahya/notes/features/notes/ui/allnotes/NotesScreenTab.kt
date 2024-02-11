@@ -1,4 +1,4 @@
-package com.bouyahya.notes.features.notes.ui
+package com.bouyahya.notes.features.notes.ui.allnotes
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home

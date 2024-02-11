@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
-import com.bouyahya.notes.features.notes.ui.NotesScreenTab
+import com.bouyahya.notes.features.notes.ui.allnotes.NotesScreenTab
 import com.bouyahya.notes.features.profile.ui.ProfileScreenTab
 import com.bouyahya.notes.core.navigation.rails.NavigationItem
 import com.bouyahya.notes.core.navigation.rails.NavigationSideBar

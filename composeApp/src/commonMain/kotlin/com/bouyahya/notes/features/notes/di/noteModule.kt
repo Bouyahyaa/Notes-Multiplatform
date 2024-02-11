@@ -5,7 +5,7 @@ import com.bouyahya.notes.features.notes.data.local.NoteLocalDataSource
 import com.bouyahya.notes.features.notes.data.local.NoteLocalDataSourceImpl
 import com.bouyahya.notes.features.notes.data.repository.NoteRepositoryImpl
 import com.bouyahya.notes.features.notes.domain.NoteRepository
-import com.bouyahya.notes.features.notes.ui.NotesViewModel
+import com.bouyahya.notes.features.notes.ui.allnotes.NotesViewModel
 import org.koin.dsl.module
 
 val noteModule

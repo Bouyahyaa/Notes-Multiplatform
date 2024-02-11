@@ -1,4 +1,4 @@
-package com.bouyahya.notes.features.notes.ui
+package com.bouyahya.notes.features.notes.ui.allnotes
 
 import com.bouyahya.notes.features.notes.domain.Note
 

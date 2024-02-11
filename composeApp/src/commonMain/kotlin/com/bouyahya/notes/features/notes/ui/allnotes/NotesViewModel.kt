@@ -1,4 +1,4 @@
-package com.bouyahya.notes.features.notes.ui
+package com.bouyahya.notes.features.notes.ui.allnotes
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
@@ -11,7 +11,13 @@ class NotesViewModel(
     private val noteRepository: NoteRepository,
     val state: MutableStateFlow<NotesState> = MutableStateFlow(NotesState())
 ) : ScreenModel {
-    init {
+    fun onEvent(event: NotesEvent) {
+        when (event) {
+            is NotesEvent.GetAllNotes -> getNotes()
+        }
+    }
+
+    private fun getNotes() {
         screenModelScope.launch {
             state.update {
                 it.copy(
@@ -27,8 +33,8 @@ class NotesViewModel(
                             noteList = notes
                         )
                     }
-                }.onFailure {
-                    println("noteRepositoryOnFailure $it")
+                }.onFailure { throwable ->
+                    println("noteRepositoryOnFailure $throwable")
                     state.update {
                         it.copy(
                             error = "Something went wrong!"
