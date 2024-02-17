@@ -33,7 +33,7 @@ class NotesViewModel(
                             noteList = notes
                         )
                     }
-                }.onFailure { throwable ->
+                }.onFailure {
                     state.update {
                         it.copy(
                             error = "Something went wrong!"

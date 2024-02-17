@@ -46,6 +46,7 @@ kotlin {
             implementation(libs.kotlin.coroutine)
             implementation(libs.sqldelight.runtime)
             implementation(libs.koin.core)
+            implementation(libs.kamel)
             with(libs.voyager) {
                 implementation(navigator)
                 implementation(transitions)

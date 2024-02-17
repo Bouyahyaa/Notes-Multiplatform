@@ -22,6 +22,7 @@ ktorVersion = "2.3.7"
 sqlDelightVersion = "2.0.0"
 koin = "3.5.3"
 touchlabVersion = "2.0.6"
+kamel = "0.9.2"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -59,6 +60,7 @@ sqldelight-sqlite = { module = "app.cash.sqldelight:sqlite-driver", version.ref 
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 touchlab = { module = "co.touchlab:stately-common", version.ref = "touchlabVersion" }
+kamel = { module = "media.kamel:kamel-image", version.ref = "kamel" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
