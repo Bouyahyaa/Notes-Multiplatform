@@ -4,6 +4,6 @@ import com.bouyahya.notes.features.profile.domain.model.Picture
 
 data class ProfileState(
     val picture: Picture? = null,
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val error: String = "",
 )
