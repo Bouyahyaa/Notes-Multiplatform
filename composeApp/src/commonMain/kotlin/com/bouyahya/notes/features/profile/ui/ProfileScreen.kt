@@ -1,10 +1,8 @@
 package com.bouyahya.notes.features.profile.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import com.bouyahya.notes.features.profile.ui.components.ProfileShimmer
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
@@ -40,7 +39,7 @@ class ProfileScreen : Screen {
             verticalArrangement = Arrangement.Center
         ) {
             if (state.isLoading) {
-                CircularProgressIndicator()
+                ProfileShimmer()
             } else if (state.error.isNotEmpty()) {
                 Text(text = state.error)
             } else {
