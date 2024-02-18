@@ -119,8 +119,10 @@ fun App() {
 @Composable
 fun RowScope.TabItem(tab: Tab, tabNavigator: TabNavigator, onTabChanged: () -> Unit) {
     BottomNavigationItem(
-        modifier = Modifier.background(androidx.compose.material3.MaterialTheme.colorScheme.surface)
-            .height(58.dp).clip(RoundedCornerShape(16.dp)),
+        modifier = Modifier
+            .background(androidx.compose.material3.MaterialTheme.colorScheme.surface)
+            .height(58.dp)
+            .clip(RoundedCornerShape(16.dp)),
         selected = tabNavigator.current == tab,
         onClick = {
             tabNavigator.current = tab
@@ -131,7 +133,9 @@ fun RowScope.TabItem(tab: Tab, tabNavigator: TabNavigator, onTabChanged: () -> U
                 Icon(
                     painter,
                     contentDescription = tab.options.title,
-                    tint = if (tabNavigator.current == tab) MaterialTheme.colors.secondaryVariant else Color.Black
+                    tint = if (tabNavigator.current == tab)
+                        MaterialTheme.colors.secondaryVariant else
+                        Color.Black
                 )
             }
         },

@@ -1,5 +1,7 @@
 package com.bouyahya.notes.features.profile.ui
 
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
@@ -18,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import com.bouyahya.notes.features.profile.ui.components.ProfileShimmer
+import com.valentinilk.shimmer.shimmer
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
@@ -44,9 +47,24 @@ class ProfileScreen : Screen {
                 Text(text = state.error)
             } else {
                 KamelImage(
-                    resource = asyncPainterResource(
-                        state.picture?.url ?: "https://placekitten.com/200/200"
-                    ),
+                    resource = asyncPainterResource(state.picture?.url ?: "https://placekitten.com/200/200"),
+                    animationSpec = tween(),
+                    onLoading = { _ ->
+                        Box(
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .size(100.dp)
+                                .shimmer(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .clip(CircleShape)
+                                    .size(100.dp)
+                                    .background(Color.Gray)
+                            )
+                        }
+                    },
                     contentScale = ContentScale.Crop,
                     contentDescription = "Profile picture",
                     modifier = Modifier
