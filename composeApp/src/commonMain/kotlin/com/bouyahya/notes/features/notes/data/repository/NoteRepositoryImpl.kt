@@ -3,8 +3,8 @@ package com.bouyahya.notes.features.notes.data.repository
 import com.bouyahya.notes.features.notes.data.local.NoteLocalDataSource
 import com.bouyahya.notes.features.notes.data.mapper.toNote
 import com.bouyahya.notes.features.notes.data.mapper.toNoteEntity
-import com.bouyahya.notes.features.notes.domain.Note
-import com.bouyahya.notes.features.notes.domain.NoteRepository
+import com.bouyahya.notes.features.notes.domain.model.Note
+import com.bouyahya.notes.features.notes.domain.repository.NoteRepository
 
 class NoteRepositoryImpl(
     private val noteLocalDataSource: NoteLocalDataSource

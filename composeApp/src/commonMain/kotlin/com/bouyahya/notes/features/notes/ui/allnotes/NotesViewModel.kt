@@ -2,7 +2,7 @@ package com.bouyahya.notes.features.notes.ui.allnotes
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.bouyahya.notes.features.notes.domain.NoteRepository
+import com.bouyahya.notes.features.notes.domain.repository.NoteRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch

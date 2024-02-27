@@ -1,4 +1,4 @@
-package com.bouyahya.notes.core.navigation.rails
+package com.bouyahya.notes.core.navigation.bottom_navigation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

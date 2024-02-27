@@ -14,16 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.navigator.Navigator
-import com.bouyahya.notes.features.notes.domain.Note
-import com.bouyahya.notes.features.notes.ui.addeditNote.AddEditNoteScreen
+import com.bouyahya.notes.features.notes.domain.model.Note
+import com.bouyahya.notes.features.notes.ui.allnotes.AllNotesNavigation
 import com.bouyahya.notes.features.notes.ui.allnotes.NotesEvent
 
 @Composable
 fun NotesListScreen(
     notesList: List<Note>,
-    navigator: Navigator,
-    onEvent: (NotesEvent) -> Unit
+    onEvent: (NotesEvent) -> Unit,
+    onNavigation: (AllNotesNavigation) -> Unit
 ) {
     Scaffold(
         backgroundColor = Color.Transparent,
@@ -40,7 +39,7 @@ fun NotesListScreen(
             FloatingActionButton(
                 backgroundColor = MaterialTheme.colors.secondaryVariant,
                 onClick = {
-                    navigator.push(AddEditNoteScreen())
+                    onNavigation(AllNotesNavigation.NavigateToAddEditNote())
                 },
                 content = {
                     Icon(
@@ -54,8 +53,8 @@ fun NotesListScreen(
     ) {
         NotesList(
             notesList = notesList,
-            navigator = navigator,
-            onEvent = onEvent
+            onEvent = onEvent,
+            onNavigation = onNavigation
         )
     }
 }
@@ -64,8 +63,8 @@ fun NotesListScreen(
 @Composable
 fun NotesList(
     notesList: List<Note>,
-    navigator: Navigator,
-    onEvent: (NotesEvent) -> Unit
+    onEvent: (NotesEvent) -> Unit,
+    onNavigation: (AllNotesNavigation) -> Unit
 ) {
     if (notesList.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -84,7 +83,7 @@ fun NotesList(
                     icon = {
                         IconButton(
                             onClick = {
-                                navigator.push(AddEditNoteScreen(id = note.id))
+                                onNavigation(AllNotesNavigation.NavigateToAddEditNote(noteId = note.id))
                             },
                             modifier = Modifier
                                 .background(

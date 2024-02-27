@@ -1,6 +1,6 @@
 package com.bouyahya.notes.features.notes.ui.allnotes
 
-import com.bouyahya.notes.features.notes.domain.Note
+import com.bouyahya.notes.features.notes.domain.model.Note
 
 data class NotesState(
     val noteList: List<Note> = emptyList(),

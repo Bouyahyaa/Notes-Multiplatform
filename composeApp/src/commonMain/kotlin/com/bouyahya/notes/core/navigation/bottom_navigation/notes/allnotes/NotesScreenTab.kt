@@ -1,4 +1,4 @@
-package com.bouyahya.notes.features.notes.ui.allnotes
+package com.bouyahya.notes.core.navigation.bottom_navigation.notes.allnotes
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -12,7 +12,7 @@ import cafe.adriel.voyager.transitions.SlideTransition
 object NotesScreenTab : Tab {
     @Composable
     override fun Content() {
-        Navigator(NotesScreen) { navigator ->
+        Navigator(NotesScreenNav) { navigator ->
             SlideTransition(navigator)
         }
     }
