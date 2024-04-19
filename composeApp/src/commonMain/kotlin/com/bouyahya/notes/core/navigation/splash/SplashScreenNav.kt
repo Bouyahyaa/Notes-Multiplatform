@@ -1,4 +1,4 @@
-package com.bouyahya.notes.features.splash
+package com.bouyahya.notes.core.navigation.splash
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing

@@ -7,7 +7,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.bouyahya.notes.core.navigation.auth_navigation.AuthNavigation
 import com.bouyahya.notes.core.navigation.bottom_navigation.BottomNavigation
-import com.bouyahya.notes.features.splash.SplashScreenNav
+import com.bouyahya.notes.core.navigation.splash.SplashScreenNav
 import com.russhwolf.settings.Settings
 import kotlinx.coroutines.delay
 import org.koin.compose.koinInject
