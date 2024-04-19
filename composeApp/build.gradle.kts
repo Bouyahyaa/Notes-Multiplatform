@@ -39,15 +39,14 @@ kotlin {
             implementation(compose.foundation)
             implementation(compose.material)
             implementation(compose.ui)
-            @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
             implementation(compose.material3)
             implementation(libs.screen.size)
             implementation(libs.kotlin.coroutine)
             implementation(libs.sqldelight.runtime)
-            implementation(libs.koin.core)
             implementation(libs.kamel)
             implementation(libs.shimmer)
+            implementation(libs.settings)
             with(libs.voyager) {
                 implementation(navigator)
                 implementation(transitions)
@@ -59,6 +58,10 @@ kotlin {
                 implementation(core)
                 implementation(content.negotiation)
                 implementation(serialization)
+            }
+            with(libs.koin) {
+                implementation(core)
+                implementation(compose)
             }
         }
 
