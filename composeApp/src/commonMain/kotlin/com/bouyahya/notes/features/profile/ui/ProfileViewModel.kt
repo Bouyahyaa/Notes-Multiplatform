@@ -1,7 +1,7 @@
 package com.bouyahya.notes.features.profile.ui
 
-import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.bouyahya.notes.features.profile.domain.repository.ProfileRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 class ProfileViewModel(
     private val profileRepository: ProfileRepository,
     val state: MutableStateFlow<ProfileState> = MutableStateFlow(ProfileState())
-) : ScreenModel {
+) : ViewModel() {
     fun onEvent(event: ProfileEvent) {
         when (event) {
             is ProfileEvent.GetProfile -> getProfile()
@@ -18,7 +18,7 @@ class ProfileViewModel(
     }
 
     private fun getProfile() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             state.update {
                 it.copy(
                     isLoading = true

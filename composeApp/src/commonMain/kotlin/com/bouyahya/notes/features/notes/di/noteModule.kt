@@ -1,5 +1,6 @@
 package com.bouyahya.notes.features.notes.di
 
+import androidx.lifecycle.SavedStateHandle
 import com.bouyahya.notes.AppDatabase
 import com.bouyahya.notes.features.notes.data.local.NoteLocalDataSource
 import com.bouyahya.notes.features.notes.data.local.NoteLocalDataSourceImpl
@@ -29,11 +30,9 @@ val noteModule
             )
         }
 
-        factory { parameters ->
-            val noteId = parameters.get<Pair<String, Long?>>(0).second
+        factory {
             AddEditNoteViewModel(
                 noteRepository = get(),
-                noteId = noteId
             )
         }
     }

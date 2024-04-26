@@ -7,6 +7,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,11 +21,18 @@ import com.bouyahya.notes.features.profile.ui.components.ProfileShimmer
 import com.valentinilk.shimmer.shimmer
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
+import org.koin.compose.koinInject
 
 @Composable
 fun ProfileScreen(
-    state: ProfileState,
+    viewModel: ProfileViewModel = koinInject(),
 ) {
+    val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.onEvent(ProfileEvent.GetProfile)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()

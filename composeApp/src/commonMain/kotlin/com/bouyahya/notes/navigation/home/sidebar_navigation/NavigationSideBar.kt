@@ -1,4 +1,4 @@
-package com.bouyahya.notes.core.navigation.bottom_navigation
+package com.bouyahya.notes.navigation.home.sidebar_navigation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,62 +8,48 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.bouyahya.notes.navigation.home.utils.NavigationItem
+import com.bouyahya.notes.navigation.home.utils.selected
 
 @Composable
 fun NavigationSideBar(
-    items: List<NavigationItem>, selectedItemIndex: Int, onNavigate: (Int) -> Unit
+    items: List<NavigationItem>,
+    navController: NavHostController,
 ) {
     NavigationRail {
         Column(
             modifier = Modifier.fillMaxHeight(),
             verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically)
         ) {
-            items.forEachIndexed { index, item ->
+            items.forEach { navigationItem ->
+                val selected = navigationItem.selected(navController)
+
                 NavigationRailItem(
                     colors = NavigationRailItemDefaults.colors(
                         selectedIconColor = androidx.compose.material.MaterialTheme.colors.secondaryVariant,
                         selectedTextColor = androidx.compose.material.MaterialTheme.colors.secondaryVariant,
                     ),
-                    selected = selectedItemIndex == index,
+                    selected = selected,
                     onClick = {
-                        onNavigate(index)
+                        navController.navigate(navigationItem.route) {
+                            launchSingleTop = true
+                        }
                     },
                     icon = {
                         NavigationIcon(
-                            item = item,
-                            selected = selectedItemIndex == index
+                            item = navigationItem,
+                            selected = selected
                         )
                     },
                     label = {
                         Text(
-                            text = item.title,
+                            text = navigationItem.title,
                             fontSize = MaterialTheme.typography.bodySmall.fontSize
                         )
                     },
                 )
             }
         }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun NavigationIcon(
-    item: NavigationItem,
-    selected: Boolean
-) {
-    BadgedBox(badge = {
-        if (item.badgeCount != null) {
-            Badge {
-                Text(text = item.badgeCount.toString())
-            }
-        } else if (item.hasNews) {
-            Badge()
-        }
-    }) {
-        Icon(
-            imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
-            contentDescription = item.title,
-        )
     }
 }

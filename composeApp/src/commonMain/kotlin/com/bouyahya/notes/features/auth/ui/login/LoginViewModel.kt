@@ -1,7 +1,7 @@
 package com.bouyahya.notes.features.auth.ui.login
 
-import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.bouyahya.notes.core.utils.Result
 import com.bouyahya.notes.core.utils.ValidationEvent
 import com.bouyahya.notes.features.auth.domain.repository.AuthRepository
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
     private val authRepository: AuthRepository,
     val state: MutableStateFlow<LoginState> = MutableStateFlow(LoginState()),
-) : ScreenModel {
+) : ViewModel() {
 
     private val validationEventChannel = Channel<ValidationEvent>()
     val validationEvents = validationEventChannel.receiveAsFlow()
@@ -31,7 +31,7 @@ class LoginViewModel(
     }
 
     private fun submit() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             if (state.value.email.isEmpty() ||
                 state.value.password.isEmpty()
             ) {

@@ -1,7 +1,7 @@
 package com.bouyahya.notes.features.notes.ui.allnotes
 
-import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.bouyahya.notes.features.notes.domain.repository.NoteRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -9,8 +9,8 @@ import kotlinx.coroutines.launch
 
 class NotesViewModel(
     private val noteRepository: NoteRepository,
-    val state: MutableStateFlow<NotesState> = MutableStateFlow(NotesState())
-) : ScreenModel {
+    val state: MutableStateFlow<NotesState> = MutableStateFlow(NotesState()),
+) : ViewModel() {
     fun onEvent(event: NotesEvent) {
         when (event) {
             is NotesEvent.GetAllNotes -> getNotes()
@@ -19,7 +19,7 @@ class NotesViewModel(
     }
 
     private fun getNotes() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             state.update {
                 it.copy(
                     isLoading = true
@@ -50,7 +50,7 @@ class NotesViewModel(
     }
 
     private fun deleteNote(event: NotesEvent.DeleteNote) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             noteRepository
                 .deleteNote(event.noteId)
                 .onSuccess {

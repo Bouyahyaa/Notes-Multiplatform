@@ -41,19 +41,15 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.material3)
+            implementation(libs.compose.navigation)
+            implementation(libs.compose.viewmodel)
             implementation(libs.screen.size)
             implementation(libs.kotlin.coroutine)
             implementation(libs.sqldelight.runtime)
             implementation(libs.kamel)
             implementation(libs.shimmer)
             implementation(libs.settings)
-            with(libs.voyager) {
-                implementation(navigator)
-                implementation(transitions)
-                implementation(tab.navigator)
-                implementation(screen.model)
-                implementation(koin)
-            }
+
             with(libs.ktor) {
                 implementation(core)
                 implementation(content.negotiation)

@@ -5,16 +5,26 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import com.bouyahya.notes.features.notes.ui.allnotes.components.NotesListScreen
+import org.koin.compose.koinInject
 
 @Composable
 fun NotesScreen(
-    state: NotesState,
-    onEvent: (NotesEvent) -> Unit,
-    onNavigation: (AllNotesNavigation) -> Unit
+    navController: NavController,
+    viewModel: NotesViewModel = koinInject(),
 ) {
+    val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.onEvent(NotesEvent.GetAllNotes)
+    }
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -26,8 +36,8 @@ fun NotesScreen(
         } else {
             NotesListScreen(
                 notesList = state.noteList,
-                onEvent = onEvent,
-                onNavigation = onNavigation
+                onEvent = viewModel::onEvent,
+                navController = navController
             )
         }
     }

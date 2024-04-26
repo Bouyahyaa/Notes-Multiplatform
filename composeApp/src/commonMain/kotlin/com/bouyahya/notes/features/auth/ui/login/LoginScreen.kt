@@ -6,6 +6,9 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -14,19 +17,37 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.bouyahya.notes.core.utils.ValidationEvent
+import com.bouyahya.notes.navigation.Graph
 import kotlinproject.composeapp.generated.resources.Res
 import kotlinproject.composeapp.generated.resources.compose_multiplatform
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun LoginScreen(
-    state: LoginState,
-    onEvent: (LoginEvent) -> Unit,
-    scaffoldState: ScaffoldState
+    navController: NavController,
+    viewModel: LoginViewModel = koinInject(),
 ) {
     val focusManager = LocalFocusManager.current
+    val state by viewModel.state.collectAsState()
+
+    val scaffoldState = rememberScaffoldState()
+
+    LaunchedEffect(true) {
+        viewModel.validationEvents.collect { state ->
+            when (state) {
+                is ValidationEvent.Success -> navController.navigate(Graph.HOME)
+                is ValidationEvent.Failure -> scaffoldState.snackbarHostState.showSnackbar(
+                    message = state.message,
+                    actionLabel = "Dismiss"
+                )
+            }
+        }
+    }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -51,7 +72,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = state.email,
                 onValueChange = {
-                    onEvent(
+                    viewModel.onEvent(
                         LoginEvent.UpdateLoginFields(
                             state.copy(email = it)
                         )
@@ -68,7 +89,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = state.password,
                 onValueChange = {
-                    onEvent(
+                    viewModel.onEvent(
                         LoginEvent.UpdateLoginFields(
                             state.copy(password = it)
                         )
@@ -85,7 +106,7 @@ fun LoginScreen(
 
             Button(
                 onClick = {
-                    onEvent(LoginEvent.Submit)
+                    viewModel.onEvent(LoginEvent.Submit)
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {

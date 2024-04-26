@@ -7,9 +7,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
@@ -17,18 +16,38 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.bouyahya.notes.core.utils.ValidationEvent
+import org.koin.compose.koinInject
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AddEditNoteScreen(
-    state: AddEditNoteState,
-    onEvent: (AddEditNoteEvent) -> Unit,
-    onNavigation: (AddEditNoteNavigation) -> Unit,
-    scaffoldState: ScaffoldState
+    navController: NavController,
+    noteId: Long,
+    viewModel: AddEditNoteViewModel = koinInject(),
 ) {
-    val note = state.note.value
+    val state by viewModel.state.collectAsState()
+    val note = viewModel.state.value.note.value
+    val scaffoldState: ScaffoldState = rememberScaffoldState()
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(true) {
+        viewModel.validationEvents.collect { state ->
+            when (state) {
+                is ValidationEvent.Success -> navController.popBackStack()
+                is ValidationEvent.Failure -> scaffoldState.snackbarHostState.showSnackbar(
+                    message = state.message,
+                    actionLabel = "Dismiss"
+                )
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        if (noteId != -1L)
+            viewModel.onEvent(AddEditNoteEvent.GetNote(noteId))
+    }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -49,10 +68,10 @@ fun AddEditNoteScreen(
         ) {
             // Return icon button
             IconButton(onClick = {
-                onNavigation(AddEditNoteNavigation.BackClick)
+                navController.popBackStack()
             }) {
                 Icon(
-                    Icons.Default.ArrowBack,
+                    Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Return"
                 )
             }
@@ -61,7 +80,7 @@ fun AddEditNoteScreen(
             OutlinedTextField(
                 value = note.title,
                 onValueChange = {
-                    onEvent(
+                    viewModel.onEvent(
                         AddEditNoteEvent.UpdateNoteFields(
                             note.copy(
                                 title = it
@@ -85,7 +104,7 @@ fun AddEditNoteScreen(
             OutlinedTextField(
                 value = note.description,
                 onValueChange = {
-                    onEvent(
+                    viewModel.onEvent(
                         AddEditNoteEvent.UpdateNoteFields(
                             note.copy(
                                 description = it
@@ -113,7 +132,7 @@ fun AddEditNoteScreen(
             Button(
                 onClick = {
                     if (!state.isLoading)
-                        onEvent(AddEditNoteEvent.Submit)
+                        viewModel.onEvent(AddEditNoteEvent.Submit(noteId))
                 },
                 enabled = !state.isLoading,
                 colors = ButtonDefaults.buttonColors(

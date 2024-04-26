@@ -14,15 +14,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.bouyahya.notes.features.notes.domain.model.Note
-import com.bouyahya.notes.features.notes.ui.allnotes.AllNotesNavigation
 import com.bouyahya.notes.features.notes.ui.allnotes.NotesEvent
+import com.bouyahya.notes.navigation.home.note.NoteScreenRoute
 
 @Composable
 fun NotesListScreen(
     notesList: List<Note>,
     onEvent: (NotesEvent) -> Unit,
-    onNavigation: (AllNotesNavigation) -> Unit
+    navController: NavController,
 ) {
     Scaffold(
         backgroundColor = Color.Transparent,
@@ -39,7 +40,7 @@ fun NotesListScreen(
             FloatingActionButton(
                 backgroundColor = MaterialTheme.colors.secondaryVariant,
                 onClick = {
-                    onNavigation(AllNotesNavigation.NavigateToAddEditNote())
+                    navController.navigate(NoteScreenRoute.AddEditNote.route)
                 },
                 content = {
                     Icon(
@@ -54,7 +55,7 @@ fun NotesListScreen(
         NotesList(
             notesList = notesList,
             onEvent = onEvent,
-            onNavigation = onNavigation
+            navController = navController
         )
     }
 }
@@ -64,7 +65,7 @@ fun NotesListScreen(
 fun NotesList(
     notesList: List<Note>,
     onEvent: (NotesEvent) -> Unit,
-    onNavigation: (AllNotesNavigation) -> Unit
+    navController: NavController
 ) {
     if (notesList.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -83,7 +84,7 @@ fun NotesList(
                     icon = {
                         IconButton(
                             onClick = {
-                                onNavigation(AllNotesNavigation.NavigateToAddEditNote(noteId = note.id))
+                                navController.navigate(NoteScreenRoute.AddEditNote.route + "?id=${note.id}")
                             },
                             modifier = Modifier
                                 .background(
