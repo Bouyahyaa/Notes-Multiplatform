@@ -3,21 +3,18 @@ package com.bouyahya.notes.features.notes.ui.addeditNote
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.bouyahya.notes.core.utils.ValidationEvent
+import com.bouyahya.notes.uikit.CustomTextField
 import org.koin.compose.koinInject
 
 @Composable
@@ -77,8 +74,9 @@ fun AddEditNoteScreen(
             }
 
             // Title TextField
-            OutlinedTextField(
+            CustomTextField(
                 value = note.title,
+                label = "Title",
                 onValueChange = {
                     viewModel.onEvent(
                         AddEditNoteEvent.UpdateNoteFields(
@@ -88,21 +86,15 @@ fun AddEditNoteScreen(
                         )
                     )
                 },
-                label = { Text("Title") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                )
             )
 
             // Description TextField
-            OutlinedTextField(
+            CustomTextField(
                 value = note.description,
+                label = "Description",
                 onValueChange = {
                     viewModel.onEvent(
                         AddEditNoteEvent.UpdateNoteFields(
@@ -112,20 +104,10 @@ fun AddEditNoteScreen(
                         )
                     )
                 },
-                label = { Text("Description") },
-                minLines = 10,
+                maxLine = 10,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        keyboardController?.hide()
-                        focusManager.clearFocus()
-                    }
-                )
             )
 
             // Submit Button

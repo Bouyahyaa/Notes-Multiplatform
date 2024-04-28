@@ -1,9 +1,9 @@
 package com.bouyahya.notes.features.auth.ui.login
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -11,15 +11,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.bouyahya.notes.core.utils.ValidationEvent
 import com.bouyahya.notes.navigation.Graph
+import com.bouyahya.notes.uikit.CustomTextField
 import kotlinproject.composeapp.generated.resources.Res
 import kotlinproject.composeapp.generated.resources.compose_multiplatform
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -32,10 +32,10 @@ fun LoginScreen(
     navController: NavController,
     viewModel: LoginViewModel = koinInject(),
 ) {
-    val focusManager = LocalFocusManager.current
     val state by viewModel.state.collectAsState()
-
     val scaffoldState = rememberScaffoldState()
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(true) {
         viewModel.validationEvents.collect { state ->
@@ -59,13 +59,19 @@ fun LoginScreen(
         backgroundColor = Color.Transparent
     ) {
         Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .padding(16.dp)
+                .clickable(
+                    interactionSource = MutableInteractionSource(),
+                    indication = null,
+                ) {
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
+                }
         ) {
-
             Image(
                 painter = painterResource(Res.drawable.compose_multiplatform),
                 contentDescription = "Logo",
@@ -74,8 +80,9 @@ fun LoginScreen(
                     .size(100.dp)
             )
 
-            OutlinedTextField(
+            CustomTextField(
                 value = state.email,
+                label = "Email",
                 onValueChange = {
                     viewModel.onEvent(
                         LoginEvent.UpdateLoginFields(
@@ -83,16 +90,14 @@ fun LoginScreen(
                         )
                     )
                 },
-                label = { Text("Email") },
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) })
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
+            CustomTextField(
                 value = state.password,
+                label = "Password",
                 onValueChange = {
                     viewModel.onEvent(
                         LoginEvent.UpdateLoginFields(
@@ -100,11 +105,9 @@ fun LoginScreen(
                         )
                     )
                 },
-                label = { Text("Password") },
+                isVisible = false,
+                keyboardType = KeyboardType.Password,
                 modifier = Modifier.fillMaxWidth(),
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
             )
 
             Spacer(modifier = Modifier.height(16.dp))
