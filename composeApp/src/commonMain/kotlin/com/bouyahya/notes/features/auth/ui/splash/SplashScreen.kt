@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.bouyahya.notes.navigation.Graph
-import com.bouyahya.notes.navigation.auth.AuthScreenRoute
+import com.bouyahya.notes.navigation.LocalNavController
 import kotlinproject.composeapp.generated.resources.Res
 import kotlinproject.composeapp.generated.resources.compose_multiplatform
 import kotlinx.coroutines.delay
@@ -31,10 +31,10 @@ import org.koin.compose.koinInject
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SplashScreen(
-    navController: NavController,
     viewModel: SplashViewModel = koinInject()
 ) {
     val alpha = remember { Animatable(0f) }
+    val navController = LocalNavController.current
 
     LaunchedEffect(alpha) {
         alpha.animateTo(
@@ -49,11 +49,18 @@ fun SplashScreen(
     LaunchedEffect(Unit) {
         delay(1500L)
 
-        // check and navigate
-        if (viewModel.authenticateCheck()) {
-            navController.navigate(Graph.HOME)
+        // check the destination
+        val destination = if (viewModel.authenticateCheck()) {
+            Graph.HOME
         } else {
-            navController.navigate(AuthScreenRoute.LoginScreen.route)
+            Graph.AUTH
+        }
+
+        // navigate to chosen destination
+        navController.navigate(destination) {
+            popUpTo("splash_screen") {
+                inclusive = true
+            }
         }
     }
 

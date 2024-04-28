@@ -13,57 +13,65 @@ import androidx.compose.ui.unit.dp
 import com.valentinilk.shimmer.shimmer
 
 @Composable
-fun ProfileShimmer() {
-    Box(
-        modifier = Modifier
-            .clip(CircleShape)
-            .size(100.dp)
-            .shimmer(),
-        contentAlignment = Alignment.Center
+fun ProfileShimmer(
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = modifier
     ) {
         Box(
             modifier = Modifier
                 .clip(CircleShape)
                 .size(100.dp)
-                .background(Color.Gray)
-        )
-    }
+                .shimmer(),
+            contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .size(100.dp)
+                    .background(Color.Gray)
+            )
+        }
 
-    Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-    Box(
-        modifier = Modifier
-            .clip(RectangleShape)
-            .fillMaxWidth()
-            .height(10.dp)
-            .shimmer(),
-        contentAlignment = Alignment.Center
-    ) {
+        Box(
+            modifier = Modifier
+                .clip(RectangleShape)
+                .fillMaxWidth()
+                .height(10.dp)
+                .shimmer(),
+            contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .clip(RectangleShape)
+                    .fillMaxWidth(0.5f)
+                    .height(10.dp)
+                    .background(Color.Gray)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
         Box(
             modifier = Modifier
                 .clip(RectangleShape)
                 .fillMaxWidth(0.5f)
                 .height(10.dp)
-                .background(Color.Gray)
-        )
-    }
-
-    Spacer(modifier = Modifier.height(8.dp))
-
-    Box(
-        modifier = Modifier
-            .clip(RectangleShape)
-            .fillMaxWidth(0.5f)
-            .height(10.dp)
-            .shimmer(),
-        contentAlignment = Alignment.Center
-    ) {
-        Box(
-            modifier = Modifier
-                .clip(RectangleShape)
-                .fillMaxWidth(0.5f)
-                .height(10.dp)
-                .background(Color.Gray)
-        )
+                .shimmer(),
+            contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .clip(RectangleShape)
+                    .fillMaxWidth(0.5f)
+                    .height(10.dp)
+                    .background(Color.Gray)
+            )
+        }
     }
 }

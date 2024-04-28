@@ -40,7 +40,12 @@ fun LoginScreen(
     LaunchedEffect(true) {
         viewModel.validationEvents.collect { state ->
             when (state) {
-                is ValidationEvent.Success -> navController.navigate(Graph.HOME)
+                is ValidationEvent.Success -> navController.navigate(Graph.HOME) {
+                    popUpTo(Graph.AUTH) {
+                        inclusive = true
+                    }
+                }
+
                 is ValidationEvent.Failure -> scaffoldState.snackbarHostState.showSnackbar(
                     message = state.message,
                     actionLabel = "Dismiss"
