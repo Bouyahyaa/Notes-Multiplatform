@@ -3,7 +3,7 @@ package com.bouyahya.notes.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.bouyahya.notes.features.auth.ui.splash.SplashScreen
+import com.bouyahya.notes.features.splash.SplashScreen
 import com.bouyahya.notes.navigation.auth.authNavGraph
 import com.bouyahya.notes.navigation.home.HomeScreen
 

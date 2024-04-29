@@ -1,4 +1,4 @@
-package com.bouyahya.notes.features.auth.ui.splash
+package com.bouyahya.notes.features.splash
 
 import androidx.lifecycle.ViewModel
 import com.russhwolf.settings.Settings

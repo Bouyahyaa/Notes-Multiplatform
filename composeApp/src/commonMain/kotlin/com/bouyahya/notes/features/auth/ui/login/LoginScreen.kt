@@ -81,12 +81,12 @@ fun LoginScreen(
             )
 
             CustomTextField(
-                value = state.email,
+                value = state.loginForm.email,
                 label = "Email",
                 onValueChange = {
                     viewModel.onEvent(
                         LoginEvent.UpdateLoginFields(
-                            state.copy(email = it)
+                            state.loginForm.copy(email = it)
                         )
                     )
                 },
@@ -96,12 +96,12 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             CustomTextField(
-                value = state.password,
+                value = state.loginForm.password,
                 label = "Password",
                 onValueChange = {
                     viewModel.onEvent(
                         LoginEvent.UpdateLoginFields(
-                            state.copy(password = it)
+                            state.loginForm.copy(password = it)
                         )
                     )
                 },

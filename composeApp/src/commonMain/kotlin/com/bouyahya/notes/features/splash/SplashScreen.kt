@@ -1,4 +1,4 @@
-package com.bouyahya.notes.features.auth.ui.splash
+package com.bouyahya.notes.features.splash
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing

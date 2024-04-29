@@ -27,13 +27,13 @@ class LoginViewModel(
     }
 
     private fun updateLoginFields(event: LoginEvent.UpdateLoginFields) {
-        state.value = event.loginState
+        state.value = state.value.copy(loginForm = event.loginForm)
     }
 
     private fun submit() {
         viewModelScope.launch {
-            if (state.value.email.isEmpty() ||
-                state.value.password.isEmpty()
+            if (state.value.loginForm.email.isEmpty() ||
+                state.value.loginForm.email.isEmpty()
             ) {
                 validationEventChannel.send(
                     ValidationEvent.Failure(
@@ -49,7 +49,10 @@ class LoginViewModel(
                 )
             }
 
-            when (val result = authRepository.login(state.value.email, state.value.password)) {
+            when (val result = authRepository.login(
+                state.value.loginForm.email,
+                state.value.loginForm.password
+            )) {
                 is Result.Success -> {
                     validationEventChannel.send(ValidationEvent.Success)
                 }
