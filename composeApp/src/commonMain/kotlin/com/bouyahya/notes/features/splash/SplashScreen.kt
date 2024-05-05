@@ -63,7 +63,7 @@ fun SplashScreen(
         }
     }
 
-    Surface(color = MaterialTheme.colors.primary) {
+    Surface(color = MaterialTheme.colors.secondaryVariant) {
         Box(
             modifier = Modifier
                 .fillMaxSize()

@@ -67,7 +67,7 @@ fun CustomTextField(
             value = value,
             onValueChange = {
                 if (isKeyboardTypeNumber) {
-                    val stringInt = value.trim()
+                    val stringInt = it.trim()
 
                     val newValue =
                         if (stringInt.isEmpty()) {

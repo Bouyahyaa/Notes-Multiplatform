@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.bouyahya.notes.features.auth.ui.login.LoginScreen
+import com.bouyahya.notes.features.auth.ui.register.RegisterScreen
 import com.bouyahya.notes.navigation.Graph
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
@@ -14,6 +15,10 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
     ) {
         composable(route = AuthScreenRoute.LoginScreen.route) {
             LoginScreen(navController = navController)
+        }
+
+        composable(route = AuthScreenRoute.RegisterScreen.route) {
+            RegisterScreen(navController = navController)
         }
     }
 }

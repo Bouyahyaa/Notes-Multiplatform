@@ -1,4 +1,4 @@
-package com.bouyahya.notes.features.auth.ui.login
+package com.bouyahya.notes.features.auth.ui.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,24 +11,24 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class LoginViewModel(
+class RegisterViewModel(
     private val authRepository: AuthRepository,
-    val state: MutableStateFlow<LoginState> = MutableStateFlow(LoginState()),
+    val state: MutableStateFlow<RegisterState> = MutableStateFlow(RegisterState()),
 ) : ViewModel() {
 
     private val validationEventChannel = Channel<ValidationEvent>()
     val validationEvents = validationEventChannel.receiveAsFlow()
 
-    fun onEvent(event: LoginEvent) {
+    fun onEvent(event: RegisterEvent) {
         when (event) {
-            is LoginEvent.UpdateLoginForm -> updateLoginForm(event)
-            is LoginEvent.Submit -> submit()
+            is RegisterEvent.UpdateRegisterForm -> updateRegisterForm(event)
+            is RegisterEvent.Submit -> submit()
         }
     }
 
 
-    private fun updateLoginForm(event: LoginEvent.UpdateLoginForm) {
-        state.value = state.value.copy(loginForm = event.loginForm)
+    private fun updateRegisterForm(event: RegisterEvent.UpdateRegisterForm) {
+        state.value = state.value.copy(registerForm = event.registerForm)
     }
 
     private fun submit() {
@@ -39,9 +39,12 @@ class LoginViewModel(
                 )
             }
 
-            when (val result = authRepository.login(
-                state.value.loginForm.email,
-                state.value.loginForm.password
+            when (val result = authRepository.register(
+                state.value.registerForm.name,
+                state.value.registerForm.email,
+                state.value.registerForm.password,
+                state.value.registerForm.confirmPassword,
+                state.value.registerForm.phone
             )) {
                 is Result.Success -> {
                     validationEventChannel.send(ValidationEvent.Success)

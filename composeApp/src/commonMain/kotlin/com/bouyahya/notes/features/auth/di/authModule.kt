@@ -5,6 +5,7 @@ import com.bouyahya.notes.features.auth.data.remote.AuthRemoteDataSource
 import com.bouyahya.notes.features.auth.data.repository.AuthRepositoryImpl
 import com.bouyahya.notes.features.auth.domain.repository.AuthRepository
 import com.bouyahya.notes.features.auth.ui.login.LoginViewModel
+import com.bouyahya.notes.features.auth.ui.register.RegisterViewModel
 import com.bouyahya.notes.features.splash.SplashViewModel
 import org.koin.dsl.module
 
@@ -27,6 +28,12 @@ val authModule
 
         factory {
             LoginViewModel(
+                authRepository = get(),
+            )
+        }
+
+        factory {
+            RegisterViewModel(
                 authRepository = get(),
             )
         }

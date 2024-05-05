@@ -1,4 +1,4 @@
-package com.bouyahya.notes.features.auth.data.remote
+package com.bouyahya.notes.features.auth.data.remote.login
 
 import kotlinx.serialization.Serializable
 

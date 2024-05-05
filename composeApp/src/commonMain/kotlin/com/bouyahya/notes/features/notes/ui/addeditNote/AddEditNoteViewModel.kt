@@ -23,20 +23,14 @@ class AddEditNoteViewModel(
         when (event) {
             is AddEditNoteEvent.GetNote -> getNote(event)
 
-            is AddEditNoteEvent.UpdateTitle -> updateField(event.addEditNoteForm) {
-                it.copy(title = event.addEditNoteForm.title.validate())
-            }
-
-            is AddEditNoteEvent.UpdateDescription -> updateField(event.addEditNoteForm) {
-                it.copy(description = event.addEditNoteForm.description.validate())
-            }
+            is AddEditNoteEvent.UpdateNoteFields -> updateNoteFields(event)
 
             is AddEditNoteEvent.Submit -> submit(event)
         }
     }
 
-    private fun updateField(addEditNoteForm: AddEditNoteForm, update: (AddEditNoteForm) -> AddEditNoteForm) {
-        state.value = state.value.copy(addEditNoteForm = update(addEditNoteForm))
+    private fun updateNoteFields(event: AddEditNoteEvent.UpdateNoteFields) {
+        state.value = state.value.copy(note = event.note)
     }
 
     private fun getNote(event: AddEditNoteEvent.GetNote) {
@@ -50,12 +44,7 @@ class AddEditNoteViewModel(
                 .getNoteById(event.noteId)
                 .onSuccess { note ->
                     state.update {
-                        it.copy(
-                            addEditNoteForm = state.value.addEditNoteForm.copy(
-                                title = state.value.addEditNoteForm.title.copy(value = note.title),
-                                description = state.value.addEditNoteForm.description.copy(value = note.description),
-                            )
-                        )
+                        it.copy(note = note)
                     }
                 }.onFailure {
                     validationEventChannel.send(
@@ -75,18 +64,7 @@ class AddEditNoteViewModel(
 
     private fun submit(event: AddEditNoteEvent.Submit) {
         viewModelScope.launch {
-            state.update {
-                it.copy(
-                    addEditNoteForm = state.value.addEditNoteForm.copy(
-                        title = it.addEditNoteForm.title.validate(),
-                        description = it.addEditNoteForm.description.validate()
-                    )
-                )
-            }
-
-            if (!state.value.addEditNoteForm.isValid) return@launch
-
-            val note = state.value.addEditNoteForm.note
+            val note = state.value.note
 
             state.update {
                 it.copy(
@@ -95,7 +73,7 @@ class AddEditNoteViewModel(
             }
             noteRepository.insertNote(
                 if (event.noteId != -1L)
-                    note.copy(id = event.noteId) else
+                    note else
                     note.copy(id = Random.nextLong(0, 10000000L))
             ).onSuccess {
                 validationEventChannel.send(ValidationEvent.Success)

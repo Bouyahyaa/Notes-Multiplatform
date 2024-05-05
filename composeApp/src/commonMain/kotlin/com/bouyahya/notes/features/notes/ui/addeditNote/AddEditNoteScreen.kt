@@ -14,6 +14,8 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.bouyahya.notes.core.utils.ValidationEvent
+import com.bouyahya.notes.core.validation.ValidateEmptyField
+import com.bouyahya.notes.core.validation.ValidationResult
 import com.bouyahya.notes.uikit.CustomTextField
 import org.koin.compose.koinInject
 
@@ -27,6 +29,28 @@ fun AddEditNoteScreen(
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    var titleErrorMessage by remember { mutableStateOf<String?>(null) }
+    var descriptionErrorMessage by remember { mutableStateOf<String?>(null) }
+
+    fun validateTitle(title: String = state.note.title): ValidationResult =
+        ValidateEmptyField.execute(title).also {
+            titleErrorMessage = it.errorMessage
+        }
+
+    fun validateDescription(description: String = state.note.description): ValidationResult =
+        ValidateEmptyField.execute(description).also {
+            descriptionErrorMessage = it.errorMessage
+        }
+
+    fun validate(): Boolean {
+        val validationFields =
+            listOf(
+                validateTitle(),
+                validateDescription()
+            )
+        return validationFields.none { !it.successful }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.validationEvents.collect { state ->
@@ -74,20 +98,19 @@ fun AddEditNoteScreen(
 
             // Title TextField
             CustomTextField(
-                value = state.addEditNoteForm.note.title,
+                value = state.note.title,
                 label = "Title",
                 onValueChange = {
+                    validateTitle(it)
                     viewModel.onEvent(
-                        AddEditNoteEvent.UpdateTitle(
-                            state.addEditNoteForm.copy(
-                                title = state.addEditNoteForm.title.copy(
-                                    value = it
-                                )
+                        AddEditNoteEvent.UpdateNoteFields(
+                            state.note.copy(
+                                title = it
                             )
                         )
                     )
                 },
-                errorMessage = state.addEditNoteForm.title.error,
+                errorMessage = titleErrorMessage,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp),
@@ -95,20 +118,19 @@ fun AddEditNoteScreen(
 
             // Description TextField
             CustomTextField(
-                value = state.addEditNoteForm.note.description,
+                value = state.note.description,
                 label = "Description",
                 onValueChange = {
+                    validateDescription(it)
                     viewModel.onEvent(
-                        AddEditNoteEvent.UpdateDescription(
-                            state.addEditNoteForm.copy(
-                                description = state.addEditNoteForm.description.copy(
-                                    value = it
-                                )
+                        AddEditNoteEvent.UpdateNoteFields(
+                            state.note.copy(
+                                description = it
                             )
                         )
                     )
                 },
-                errorMessage = state.addEditNoteForm.description.error,
+                errorMessage = descriptionErrorMessage,
                 maxLine = 10,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -118,7 +140,9 @@ fun AddEditNoteScreen(
             // Submit Button
             Button(
                 onClick = {
-                    if (!state.isLoading)
+                    if (!state.isLoading &&
+                        validate()
+                    )
                         viewModel.onEvent(AddEditNoteEvent.Submit(noteId))
                 },
                 enabled = !state.isLoading,

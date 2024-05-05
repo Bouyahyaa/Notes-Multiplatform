@@ -5,10 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,7 +15,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.bouyahya.notes.core.utils.ValidationEvent
+import com.bouyahya.notes.core.validation.ValidationResult
+import com.bouyahya.notes.features.auth.ui.validation.ValidateEmail
+import com.bouyahya.notes.features.auth.ui.validation.ValidatePassword
 import com.bouyahya.notes.navigation.Graph
+import com.bouyahya.notes.navigation.auth.AuthScreenRoute
 import com.bouyahya.notes.uikit.CustomTextField
 import kotlinproject.composeapp.generated.resources.Res
 import kotlinproject.composeapp.generated.resources.compose_multiplatform
@@ -36,6 +37,32 @@ fun LoginScreen(
     val scaffoldState = rememberScaffoldState()
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    var emailErrorMessage by remember { mutableStateOf<String?>(null) }
+    var passwordErrorMessage by remember { mutableStateOf<String?>(null) }
+
+    fun validateEmail(email: String = state.loginForm.email): ValidationResult =
+        ValidateEmail.execute(email)
+            .also {
+                emailErrorMessage = it.errorMessage
+            }
+
+
+    fun validatePassword(password: String = state.loginForm.password): ValidationResult =
+        ValidatePassword.execute(password)
+            .also {
+                passwordErrorMessage = it.errorMessage
+            }
+
+
+    fun validate(): Boolean {
+        val validationFields =
+            listOf(
+                validateEmail(),
+                validatePassword()
+            )
+        return validationFields.none { !it.successful }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.validationEvents.collect { state ->
@@ -76,55 +103,59 @@ fun LoginScreen(
                 painter = painterResource(Res.drawable.compose_multiplatform),
                 contentDescription = "Logo",
                 modifier = Modifier
-                    .padding(20.dp)
+                    .padding(10.dp)
                     .size(100.dp)
             )
 
             CustomTextField(
-                value = state.loginForm.email.value,
+                value = state.loginForm.email,
                 label = "Email",
                 onValueChange = {
+                    validateEmail(it)
                     viewModel.onEvent(
-                        LoginEvent.UpdateEmail(
+                        LoginEvent.UpdateLoginForm(
                             state.loginForm.copy(
-                                email = state.loginForm.email.copy(
-                                    value = it
-                                )
+                                email = it
                             )
                         )
                     )
                 },
-                errorMessage = state.loginForm.email.error,
+                errorMessage = emailErrorMessage,
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(5.dp))
 
             CustomTextField(
-                value = state.loginForm.password.value,
+                value = state.loginForm.password,
                 label = "Password",
                 onValueChange = {
+                    validatePassword(it)
                     viewModel.onEvent(
-                        LoginEvent.UpdatePassword(
+                        LoginEvent.UpdateLoginForm(
                             state.loginForm.copy(
-                                password = state.loginForm.password.copy(
-                                    value = it
-                                )
+                                password = it
                             )
                         )
                     )
                 },
-                errorMessage = state.loginForm.password.error,
+                errorMessage = passwordErrorMessage,
                 isVisible = false,
                 keyboardType = KeyboardType.Password,
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(5.dp))
 
             Button(
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MaterialTheme.colors.secondaryVariant
+                ),
                 onClick = {
-                    viewModel.onEvent(LoginEvent.Submit)
+                    if (!state.isLoading &&
+                        validate()
+                    )
+                        viewModel.onEvent(LoginEvent.Submit)
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -135,8 +166,23 @@ fun LoginScreen(
                         modifier = Modifier.size(20.dp),
                     )
                 } else
-                    Text("Login")
+                    Text(
+                        text = "Login",
+                        color = Color.White
+                    )
             }
+
+            Spacer(modifier = Modifier.height(5.dp))
+
+            Text(
+                text = "Don't have an account? Register",
+                style = MaterialTheme.typography.body2,
+                modifier = Modifier
+                    .clickable {
+                        navController.navigate(AuthScreenRoute.RegisterScreen.route)
+                    }
+                    .padding(5.dp)
+            )
         }
     }
 }
