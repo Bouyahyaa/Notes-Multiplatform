@@ -37,7 +37,7 @@ fun LoginScreen(
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    LaunchedEffect(true) {
+    LaunchedEffect(Unit) {
         viewModel.validationEvents.collect { state ->
             when (state) {
                 is ValidationEvent.Success -> navController.navigate(Graph.HOME) {
@@ -81,30 +81,40 @@ fun LoginScreen(
             )
 
             CustomTextField(
-                value = state.loginForm.email,
+                value = state.loginForm.email.value,
                 label = "Email",
                 onValueChange = {
                     viewModel.onEvent(
-                        LoginEvent.UpdateLoginFields(
-                            state.loginForm.copy(email = it)
+                        LoginEvent.UpdateEmail(
+                            state.loginForm.copy(
+                                email = state.loginForm.email.copy(
+                                    value = it
+                                )
+                            )
                         )
                     )
                 },
+                errorMessage = state.loginForm.email.error,
                 modifier = Modifier.fillMaxWidth(),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             CustomTextField(
-                value = state.loginForm.password,
+                value = state.loginForm.password.value,
                 label = "Password",
                 onValueChange = {
                     viewModel.onEvent(
-                        LoginEvent.UpdateLoginFields(
-                            state.loginForm.copy(password = it)
+                        LoginEvent.UpdatePassword(
+                            state.loginForm.copy(
+                                password = state.loginForm.password.copy(
+                                    value = it
+                                )
+                            )
                         )
                     )
                 },
+                errorMessage = state.loginForm.password.error,
                 isVisible = false,
                 keyboardType = KeyboardType.Password,
                 modifier = Modifier.fillMaxWidth(),

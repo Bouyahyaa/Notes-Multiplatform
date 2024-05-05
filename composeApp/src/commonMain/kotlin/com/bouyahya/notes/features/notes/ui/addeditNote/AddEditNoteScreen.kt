@@ -24,12 +24,12 @@ fun AddEditNoteScreen(
     viewModel: AddEditNoteViewModel = koinInject(),
 ) {
     val state by viewModel.state.collectAsState()
-    val note = viewModel.state.value.note.value
+    val note = state.note
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    LaunchedEffect(true) {
+    LaunchedEffect(Unit) {
         viewModel.validationEvents.collect { state ->
             when (state) {
                 is ValidationEvent.Success -> navController.popBackStack()

@@ -21,27 +21,39 @@ class LoginViewModel(
 
     fun onEvent(event: LoginEvent) {
         when (event) {
-            is LoginEvent.UpdateLoginFields -> updateLoginFields(event)
+            is LoginEvent.UpdateEmail -> {
+                updateField(event.loginForm) {
+                    it.copy(email = event.loginForm.email.validate())
+                }
+            }
+
+            is LoginEvent.UpdatePassword -> {
+                updateField(event.loginForm) {
+                    it.copy(password = event.loginForm.password.validate())
+                }
+            }
+
             is LoginEvent.Submit -> submit()
         }
     }
 
-    private fun updateLoginFields(event: LoginEvent.UpdateLoginFields) {
-        state.value = state.value.copy(loginForm = event.loginForm)
+
+    private fun updateField(loginForm: LoginForm, update: (LoginForm) -> LoginForm) {
+        state.value = state.value.copy(loginForm = update(loginForm))
     }
 
     private fun submit() {
         viewModelScope.launch {
-            if (state.value.loginForm.email.isEmpty() ||
-                state.value.loginForm.email.isEmpty()
-            ) {
-                validationEventChannel.send(
-                    ValidationEvent.Failure(
-                        message = "Email and password are required"
+            state.update {
+                it.copy(
+                    loginForm = state.value.loginForm.copy(
+                        email = it.loginForm.email.validate(),
+                        password = it.loginForm.password.validate()
                     )
                 )
-                return@launch
             }
+
+            if (!state.value.loginForm.isValid) return@launch
 
             state.update {
                 it.copy(
@@ -50,8 +62,8 @@ class LoginViewModel(
             }
 
             when (val result = authRepository.login(
-                state.value.loginForm.email,
-                state.value.loginForm.password
+                state.value.loginForm.email.value,
+                state.value.loginForm.password.value
             )) {
                 is Result.Success -> {
                     validationEventChannel.send(ValidationEvent.Success)
