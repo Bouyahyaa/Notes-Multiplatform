@@ -21,17 +21,15 @@ class LoginViewModel(
 
     fun onEvent(event: LoginEvent) {
         when (event) {
-            is LoginEvent.UpdateEmail -> {
+            is LoginEvent.UpdateEmail ->
                 updateField(event.loginForm) {
                     it.copy(email = event.loginForm.email.validate())
                 }
-            }
 
-            is LoginEvent.UpdatePassword -> {
+            is LoginEvent.UpdatePassword ->
                 updateField(event.loginForm) {
                     it.copy(password = event.loginForm.password.validate())
                 }
-            }
 
             is LoginEvent.Submit -> submit()
         }

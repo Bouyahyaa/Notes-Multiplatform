@@ -24,7 +24,6 @@ fun AddEditNoteScreen(
     viewModel: AddEditNoteViewModel = koinInject(),
 ) {
     val state by viewModel.state.collectAsState()
-    val note = state.note
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -75,17 +74,20 @@ fun AddEditNoteScreen(
 
             // Title TextField
             CustomTextField(
-                value = note.title,
+                value = state.addEditNoteForm.note.title,
                 label = "Title",
                 onValueChange = {
                     viewModel.onEvent(
-                        AddEditNoteEvent.UpdateNoteFields(
-                            note.copy(
-                                title = it
+                        AddEditNoteEvent.UpdateTitle(
+                            state.addEditNoteForm.copy(
+                                title = state.addEditNoteForm.title.copy(
+                                    value = it
+                                )
                             )
                         )
                     )
                 },
+                errorMessage = state.addEditNoteForm.title.error,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp),
@@ -93,17 +95,20 @@ fun AddEditNoteScreen(
 
             // Description TextField
             CustomTextField(
-                value = note.description,
+                value = state.addEditNoteForm.note.description,
                 label = "Description",
                 onValueChange = {
                     viewModel.onEvent(
-                        AddEditNoteEvent.UpdateNoteFields(
-                            note.copy(
-                                description = it
+                        AddEditNoteEvent.UpdateDescription(
+                            state.addEditNoteForm.copy(
+                                description = state.addEditNoteForm.description.copy(
+                                    value = it
+                                )
                             )
                         )
                     )
                 },
+                errorMessage = state.addEditNoteForm.description.error,
                 maxLine = 10,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -125,7 +130,7 @@ fun AddEditNoteScreen(
                     .height(50.dp)
             ) {
                 Text(
-                    text = if (note.id.toInt() != -1)
+                    text = if (noteId != -1L)
                         "Edit Note" else
                         "Add note",
                     color = Color.White
