@@ -10,7 +10,7 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
-const val BASE_URL = "http://192.168.1.12:3000/"
+const val BASE_URL = "http://<IP_ADDRESS>/"
 internal fun createHttpClient(enableLogging: Boolean): HttpClient {
     return HttpClient {
         install(ContentNegotiation) {
