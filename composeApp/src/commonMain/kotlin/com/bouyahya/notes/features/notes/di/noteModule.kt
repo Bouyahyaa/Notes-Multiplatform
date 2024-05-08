@@ -1,10 +1,11 @@
 package com.bouyahya.notes.features.notes.di
 
+import androidx.lifecycle.SavedStateHandle
 import com.bouyahya.notes.AppDatabase
 import com.bouyahya.notes.features.notes.data.local.NoteLocalDataSource
 import com.bouyahya.notes.features.notes.data.local.NoteLocalDataSourceImpl
 import com.bouyahya.notes.features.notes.data.repository.NoteRepositoryImpl
-import com.bouyahya.notes.features.notes.domain.NoteRepository
+import com.bouyahya.notes.features.notes.domain.repository.NoteRepository
 import com.bouyahya.notes.features.notes.ui.addeditNote.AddEditNoteViewModel
 import com.bouyahya.notes.features.notes.ui.allnotes.NotesViewModel
 import org.koin.dsl.module
@@ -29,11 +30,9 @@ val noteModule
             )
         }
 
-        factory { parameters ->
-            val noteId = parameters.get<Pair<String, Long?>>(0).second
+        factory {
             AddEditNoteViewModel(
                 noteRepository = get(),
-                noteId = noteId
             )
         }
     }

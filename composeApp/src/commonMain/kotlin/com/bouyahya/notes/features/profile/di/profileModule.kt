@@ -18,6 +18,7 @@ val profileModule
         factory {
             ProfileViewModel(
                 profileRepository = get(),
+                settings = get()
             )
         }
     }

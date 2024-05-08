@@ -3,161 +3,162 @@ package com.bouyahya.notes.features.notes.ui.addeditNote
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
+import androidx.navigation.NavController
 import com.bouyahya.notes.core.utils.ValidationEvent
-import org.koin.core.parameter.parametersOf
+import com.bouyahya.notes.core.validation.ValidateEmptyField
+import com.bouyahya.notes.core.validation.ValidationResult
+import com.bouyahya.notes.uikit.CustomTextField
+import org.koin.compose.koinInject
 
-class AddEditNoteScreen(
-    val id: Long? = null
-) : Screen {
-    @OptIn(ExperimentalComposeUiApi::class)
-    @Composable
-    override fun Content() {
-        val viewModel = getScreenModel<AddEditNoteViewModel>(
-            parameters = {
-                parametersOf(
-                    "noteId" to id,
-                )
-            },
-        )
+@Composable
+fun AddEditNoteScreen(
+    navController: NavController,
+    noteId: Long,
+    viewModel: AddEditNoteViewModel = koinInject(),
+) {
+    val state by viewModel.state.collectAsState()
+    val scaffoldState: ScaffoldState = rememberScaffoldState()
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
-        val state by viewModel.state.collectAsState()
-        val note = state.note.value
-        val scaffoldState: ScaffoldState = rememberScaffoldState()
+    var titleErrorMessage by remember { mutableStateOf<String?>(null) }
+    var descriptionErrorMessage by remember { mutableStateOf<String?>(null) }
 
-        val focusManager = LocalFocusManager.current
-        val keyboardController = LocalSoftwareKeyboardController.current
-        val navigator = LocalNavigator.currentOrThrow
-
-        LaunchedEffect(key) {
-            viewModel.validationEvents.collect { state ->
-                when (state) {
-                    is ValidationEvent.Success -> navigator.pop()
-                    is ValidationEvent.Failure -> scaffoldState.snackbarHostState.showSnackbar(
-                        message = state.message,
-                        actionLabel = "Dismiss"
-                    )
-                }
-            }
+    fun validateTitle(title: String = state.note.title): ValidationResult =
+        ValidateEmptyField.execute(title).also {
+            titleErrorMessage = it.errorMessage
         }
 
-        Scaffold(
-            scaffoldState = scaffoldState,
-            backgroundColor = Color.Transparent
-        ) {
-            Column(
-                verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(15.dp)
-                    .clickable(
-                        interactionSource = MutableInteractionSource(),
-                        indication = null,
-                    ) {
-                        focusManager.clearFocus()
-                        keyboardController?.hide()
-                    }
-            ) {
-                // Return icon button
-                IconButton(onClick = {
-                    navigator.pop()
-                }) {
-                    Icon(
-                        Icons.Default.ArrowBack,
-                        contentDescription = "Return"
-                    )
-                }
+    fun validateDescription(description: String = state.note.description): ValidationResult =
+        ValidateEmptyField.execute(description).also {
+            descriptionErrorMessage = it.errorMessage
+        }
 
-                // Title TextField
-                OutlinedTextField(
-                    value = note.title,
-                    onValueChange = {
-                        viewModel.onEvent(
-                            AddEditNoteEvent.UpdateNoteFields(
-                                note.copy(
-                                    title = it
-                                )
-                            )
-                        )
-                    },
-                    label = { Text("Title") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                    )
+    fun validate(): Boolean {
+        val validationFields =
+            listOf(
+                validateTitle(),
+                validateDescription()
+            )
+        return validationFields.none { !it.successful }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.validationEvents.collect { state ->
+            when (state) {
+                is ValidationEvent.Success -> navController.popBackStack()
+                is ValidationEvent.Failure -> scaffoldState.snackbarHostState.showSnackbar(
+                    message = state.message,
+                    actionLabel = "Dismiss"
                 )
+            }
+        }
+    }
 
-                // Description TextField
-                OutlinedTextField(
-                    value = note.description,
-                    onValueChange = {
-                        viewModel.onEvent(
-                            AddEditNoteEvent.UpdateNoteFields(
-                                note.copy(
-                                    description = it
-                                )
-                            )
-                        )
-                    },
-                    label = { Text("Description") },
-                    minLines = 10,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            keyboardController?.hide()
-                            focusManager.clearFocus()
-                        }
-                    )
-                )
+    LaunchedEffect(Unit) {
+        if (noteId != -1L)
+            viewModel.onEvent(AddEditNoteEvent.GetNote(noteId))
+    }
 
-                // Submit Button
-                Button(
-                    onClick = {
-                        if (!state.isLoading)
-                            viewModel.onEvent(AddEditNoteEvent.Submit)
-                    },
-                    enabled = !state.isLoading,
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = MaterialTheme.colors.secondaryVariant
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp)
+    Scaffold(
+        scaffoldState = scaffoldState,
+        backgroundColor = Color.Transparent
+    ) {
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(15.dp)
+                .clickable(
+                    interactionSource = MutableInteractionSource(),
+                    indication = null,
                 ) {
-                    Text(
-                        text = if (id != null)
-                            "Edit Note" else
-                            "Add note",
-                        color = Color.White
-                    )
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
                 }
+        ) {
+            // Return icon button
+            IconButton(onClick = {
+                navController.popBackStack()
+            }) {
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Return"
+                )
+            }
+
+            // Title TextField
+            CustomTextField(
+                value = state.note.title,
+                label = "Title",
+                onValueChange = {
+                    validateTitle(it)
+                    viewModel.onEvent(
+                        AddEditNoteEvent.UpdateNoteFields(
+                            state.note.copy(
+                                title = it
+                            )
+                        )
+                    )
+                },
+                errorMessage = titleErrorMessage,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+            )
+
+            // Description TextField
+            CustomTextField(
+                value = state.note.description,
+                label = "Description",
+                onValueChange = {
+                    validateDescription(it)
+                    viewModel.onEvent(
+                        AddEditNoteEvent.UpdateNoteFields(
+                            state.note.copy(
+                                description = it
+                            )
+                        )
+                    )
+                },
+                errorMessage = descriptionErrorMessage,
+                maxLine = 10,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+            )
+
+            // Submit Button
+            Button(
+                onClick = {
+                    if (!state.isLoading &&
+                        validate()
+                    )
+                        viewModel.onEvent(AddEditNoteEvent.Submit(noteId))
+                },
+                enabled = !state.isLoading,
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MaterialTheme.colors.secondaryVariant
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+            ) {
+                Text(
+                    text = if (noteId != -1L)
+                        "Edit Note" else
+                        "Add note",
+                    color = Color.White
+                )
             }
         }
     }

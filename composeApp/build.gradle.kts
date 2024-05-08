@@ -39,26 +39,25 @@ kotlin {
             implementation(compose.foundation)
             implementation(compose.material)
             implementation(compose.ui)
-            @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
             implementation(compose.material3)
+            implementation(libs.compose.navigation)
+            implementation(libs.compose.viewmodel)
             implementation(libs.screen.size)
             implementation(libs.kotlin.coroutine)
             implementation(libs.sqldelight.runtime)
-            implementation(libs.koin.core)
             implementation(libs.kamel)
             implementation(libs.shimmer)
-            with(libs.voyager) {
-                implementation(navigator)
-                implementation(transitions)
-                implementation(tab.navigator)
-                implementation(screen.model)
-                implementation(koin)
-            }
+            implementation(libs.settings)
+
             with(libs.ktor) {
                 implementation(core)
                 implementation(content.negotiation)
                 implementation(serialization)
+            }
+            with(libs.koin) {
+                implementation(core)
+                implementation(compose)
             }
         }
 

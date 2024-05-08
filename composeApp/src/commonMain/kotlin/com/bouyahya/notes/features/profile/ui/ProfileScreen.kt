@@ -4,6 +4,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,36 +18,70 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
 import com.bouyahya.notes.features.profile.ui.components.ProfileShimmer
+import com.bouyahya.notes.navigation.Graph
+import com.bouyahya.notes.navigation.LocalNavController
 import com.valentinilk.shimmer.shimmer
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
+import org.koin.compose.koinInject
 
-class ProfileScreen : Screen {
-    @Composable
-    override fun Content() {
-        val viewModel = getScreenModel<ProfileViewModel>()
-        val state by viewModel.state.collectAsState()
+@Composable
+fun ProfileScreen(
+    viewModel: ProfileViewModel = koinInject(),
+) {
+    val state by viewModel.state.collectAsState()
+    val rootNavController = LocalNavController.current
 
-        LaunchedEffect(Unit) {
-            viewModel.onEvent(ProfileEvent.GetProfile)
-        }
+    LaunchedEffect(Unit) {
+        viewModel.onEvent(ProfileEvent.GetProfile)
+    }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            if (state.isLoading) {
-                ProfileShimmer()
-            } else if (state.error.isNotEmpty()) {
-                Text(text = state.error)
-            } else {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+    ) {
+        if (state.isLoading) {
+            ProfileShimmer(
+                modifier = Modifier.align(Alignment.Center)
+            )
+        } else if (state.error.isNotEmpty()) {
+            Text(
+                text = state.error,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.align(Alignment.Center)
+            )
+        } else {
+
+            Button(
+                onClick = {
+                    viewModel.onEvent(ProfileEvent.Logout)
+                    rootNavController.navigate(Graph.AUTH) {
+                        popUpTo(Graph.HOME) {
+                            inclusive = true
+                        }
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MaterialTheme.colors.secondaryVariant,
+                ),
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+            ) {
+                Text(
+                    text = "Logout",
+                    color = Color.White
+                )
+            }
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.align(Alignment.Center)
+            ) {
                 KamelImage(
                     resource = asyncPainterResource(state.picture?.url ?: "https://placekitten.com/200/200"),
                     animationSpec = tween(),

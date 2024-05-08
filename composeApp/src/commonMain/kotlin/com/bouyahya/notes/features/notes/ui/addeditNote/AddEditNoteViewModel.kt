@@ -1,9 +1,9 @@
 package com.bouyahya.notes.features.notes.ui.addeditNote
 
-import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.bouyahya.notes.core.utils.ValidationEvent
-import com.bouyahya.notes.features.notes.domain.NoteRepository
+import com.bouyahya.notes.features.notes.domain.repository.NoteRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -14,36 +14,38 @@ import kotlin.random.Random
 class AddEditNoteViewModel(
     private val noteRepository: NoteRepository,
     val state: MutableStateFlow<AddEditNoteState> = MutableStateFlow(AddEditNoteState()),
-    val noteId: Long?,
-) : ScreenModel {
+) : ViewModel() {
 
     private val validationEventChannel = Channel<ValidationEvent>()
     val validationEvents = validationEventChannel.receiveAsFlow()
 
-    init {
-        if (noteId != null) {
-            getNote()
-        }
-    }
-
     fun onEvent(event: AddEditNoteEvent) {
         when (event) {
+            is AddEditNoteEvent.GetNote -> getNote(event)
+
             is AddEditNoteEvent.UpdateNoteFields -> updateNoteFields(event)
-            is AddEditNoteEvent.Submit -> submit()
+
+            is AddEditNoteEvent.Submit -> submit(event)
         }
     }
 
-    private fun getNote() {
-        screenModelScope.launch {
+    private fun updateNoteFields(event: AddEditNoteEvent.UpdateNoteFields) {
+        state.value = state.value.copy(note = event.note)
+    }
+
+    private fun getNote(event: AddEditNoteEvent.GetNote) {
+        viewModelScope.launch {
             state.update {
                 it.copy(
                     isLoading = true
                 )
             }
             noteRepository
-                .getNoteById(noteId!!)
-                .onSuccess {
-                    state.value.note.value = it
+                .getNoteById(event.noteId)
+                .onSuccess { note ->
+                    state.update {
+                        it.copy(note = note)
+                    }
                 }.onFailure {
                     validationEventChannel.send(
                         ValidationEvent.Failure(
@@ -60,22 +62,9 @@ class AddEditNoteViewModel(
         }
     }
 
-    private fun updateNoteFields(event: AddEditNoteEvent.UpdateNoteFields) {
-        state.value.note.value = event.note
-    }
-
-    private fun submit() {
-        screenModelScope.launch {
-            val note = state.value.note.value
-
-            if (note.title.isEmpty() || note.description.isEmpty()) {
-                validationEventChannel.send(
-                    ValidationEvent.Failure(
-                        message = "Title and description are required"
-                    )
-                )
-                return@launch
-            }
+    private fun submit(event: AddEditNoteEvent.Submit) {
+        viewModelScope.launch {
+            val note = state.value.note
 
             state.update {
                 it.copy(
@@ -83,9 +72,9 @@ class AddEditNoteViewModel(
                 )
             }
             noteRepository.insertNote(
-                if (noteId == null)
-                    note.copy(id = Random.nextLong(0, 10000000L)) else
-                    note
+                if (event.noteId != -1L)
+                    note else
+                    note.copy(id = Random.nextLong(0, 10000000L))
             ).onSuccess {
                 validationEventChannel.send(ValidationEvent.Success)
             }.onFailure {

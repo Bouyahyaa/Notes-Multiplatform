@@ -1,4 +1,4 @@
-package com.bouyahya.notes.features.notes.domain
+package com.bouyahya.notes.features.notes.domain.model
 
 data class Note(
     val id: Long,

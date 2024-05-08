@@ -1,4 +1,6 @@
-package com.bouyahya.notes.features.notes.domain
+package com.bouyahya.notes.features.notes.domain.repository
+
+import com.bouyahya.notes.features.notes.domain.model.Note
 
 interface NoteRepository {
     suspend fun getAllNotes(): Result<List<Note>>
