@@ -18,4 +18,8 @@ dependencyResolutionManagement {
     }
 }
 
+// App
 include(":composeApp")
+
+// UI
+include(":uikit")

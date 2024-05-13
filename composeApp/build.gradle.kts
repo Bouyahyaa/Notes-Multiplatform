@@ -49,6 +49,7 @@ kotlin {
             implementation(libs.kamel)
             implementation(libs.shimmer)
             implementation(libs.settings)
+            implementation(projects.uikit)
 
             with(libs.ktor) {
                 implementation(core)

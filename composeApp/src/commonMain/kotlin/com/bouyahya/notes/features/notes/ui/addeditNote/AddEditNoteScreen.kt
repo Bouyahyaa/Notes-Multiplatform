@@ -16,7 +16,7 @@ import androidx.navigation.NavController
 import com.bouyahya.notes.core.utils.ValidationEvent
 import com.bouyahya.notes.core.validation.ValidateEmptyField
 import com.bouyahya.notes.core.validation.ValidationResult
-import com.bouyahya.notes.uikit.CustomTextField
+import com.bouyahya.uikit.CustomTextField
 import org.koin.compose.koinInject
 
 @Composable

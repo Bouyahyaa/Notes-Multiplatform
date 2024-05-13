@@ -26,7 +26,7 @@ import com.bouyahya.notes.features.auth.ui.validation.ValidateConfirmPassword
 import com.bouyahya.notes.features.auth.ui.validation.ValidateEmail
 import com.bouyahya.notes.features.auth.ui.validation.ValidatePassword
 import com.bouyahya.notes.navigation.auth.AuthScreenRoute
-import com.bouyahya.notes.uikit.CustomTextField
+import com.bouyahya.uikit.CustomTextField
 import kotlinproject.composeapp.generated.resources.Res
 import kotlinproject.composeapp.generated.resources.compose_multiplatform
 import org.jetbrains.compose.resources.ExperimentalResourceApi

@@ -1,4 +1,4 @@
-package com.bouyahya.notes.uikit
+package com.bouyahya.uikit
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
