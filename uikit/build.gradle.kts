@@ -29,6 +29,12 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.material3)
         }
+
+        val desktopMain by getting {
+            dependencies {
+                implementation("uk.co.caprica:vlcj:4.7.0")
+            }
+        }
     }
 }
 
