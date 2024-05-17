@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.bouyahya.notes.features.profile.ui.ProfileScreen
+import com.bouyahya.notes.features.videos.ui.VideosScreen
 import com.bouyahya.notes.navigation.Graph
 import com.bouyahya.notes.navigation.home.note.NoteNavigationGraph
 
@@ -23,6 +24,10 @@ fun HomeNavigationGraph(
 
         composable(HomeScreenRoute.Profile.route) {
             ProfileScreen()
+        }
+
+        composable(HomeScreenRoute.Videos.route) {
+            VideosScreen()
         }
     }
 }

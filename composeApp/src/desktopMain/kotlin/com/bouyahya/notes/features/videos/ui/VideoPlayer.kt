@@ -1,4 +1,4 @@
-package com.bouyahya.uikit
+package com.bouyahya.notes.features.videos.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

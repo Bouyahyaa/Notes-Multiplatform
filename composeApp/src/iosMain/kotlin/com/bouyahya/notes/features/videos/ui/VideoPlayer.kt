@@ -1,4 +1,4 @@
-package com.bouyahya.uikit
+package com.bouyahya.notes.features.videos.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

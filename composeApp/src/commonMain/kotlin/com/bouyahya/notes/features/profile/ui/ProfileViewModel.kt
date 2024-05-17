@@ -13,6 +13,11 @@ class ProfileViewModel(
     private val settings: Settings,
     val state: MutableStateFlow<ProfileState> = MutableStateFlow(ProfileState())
 ) : ViewModel() {
+
+    init {
+        getProfile()
+    }
+
     fun onEvent(event: ProfileEvent) {
         when (event) {
             is ProfileEvent.GetProfile -> getProfile()

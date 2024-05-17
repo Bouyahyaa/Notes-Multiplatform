@@ -4,17 +4,21 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.bouyahya.notes.getPlatform
 import com.bouyahya.notes.navigation.Graph
 import com.bouyahya.notes.navigation.home.bottom_navigation.BottomNavigationBar
 import com.bouyahya.notes.navigation.home.utils.NavigationItem
@@ -26,7 +30,7 @@ fun HomeScreen(
     navController:
     NavHostController = rememberNavController()
 ) {
-    val items = listOf(
+    val items = arrayListOf(
         NavigationItem(
             title = "Home",
             selectedIcon = Icons.Default.Home,
@@ -40,6 +44,18 @@ fun HomeScreen(
             route = HomeScreenRoute.Profile.route,
         )
     )
+
+    LaunchedEffect(Unit) {
+        if (!getPlatform().name.contains("Java"))
+            items.add(
+                NavigationItem(
+                    title = "Videos",
+                    selectedIcon = Icons.Filled.Settings,
+                    unselectedIcon = Icons.Outlined.Settings,
+                    route = HomeScreenRoute.Videos.route,
+                )
+            )
+    }
 
     val windowClass = calculateWindowSizeClass()
     val showNavigationRail = windowClass.widthSizeClass != WindowWidthSizeClass.Compact

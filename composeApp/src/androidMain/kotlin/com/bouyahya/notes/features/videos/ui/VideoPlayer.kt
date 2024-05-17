@@ -1,4 +1,4 @@
-package com.bouyahya.uikit
+package com.bouyahya.notes.features.videos.ui
 
 import android.widget.VideoView
 import android.widget.MediaController

@@ -15,7 +15,7 @@ val profileModule
             )
         }
 
-        factory {
+        single {
             ProfileViewModel(
                 profileRepository = get(),
                 settings = get()
