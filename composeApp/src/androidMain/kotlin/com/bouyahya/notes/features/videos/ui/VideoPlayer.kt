@@ -1,26 +1,32 @@
 package com.bouyahya.notes.features.videos.ui
 
-import android.widget.VideoView
-import android.widget.MediaController
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import chaintech.videoplayer.model.PlayerConfig
+import chaintech.videoplayer.ui.VideoPlayerView
 
 @Composable
 actual fun VideoPlayer(
     modifier: Modifier,
     url: String
 ) {
-    AndroidView(
+    VideoPlayerView(
         modifier = modifier,
-        factory = { context ->
-            VideoView(context).apply {
-                setVideoPath(url)
-                val mediaController = MediaController(context)
-                mediaController.setAnchorView(this)
-                setMediaController(mediaController)
-                start()
-            }
-        },
-        update = {})
+        url = url,
+        playerConfig = PlayerConfig(
+            enablePauseResume = true,
+            showSeekBar = true,
+            showDuration = true,
+            thumbColor = Color.Red,
+            activeTrackColor = Color.Red,
+            inactiveTrackColor = Color.White,
+            textColor = Color.White,
+            seekBarBottomPadding = 8.dp,
+            pauseResumeIconSize = 32.dp,
+            autoHideControl = true,
+            controlHideInterval = 5
+        )
+    )
 }

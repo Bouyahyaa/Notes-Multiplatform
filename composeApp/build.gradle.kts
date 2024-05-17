@@ -1,4 +1,13 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+
+val NamedDomainObjectContainer<KotlinSourceSet>.mobileMain: NamedDomainObjectProvider<KotlinSourceSet>
+    get() = named("mobileMain")
+
+val NamedDomainObjectContainer<KotlinSourceSet>.desktopMain: NamedDomainObjectProvider<KotlinSourceSet>
+    get() = named("desktopMain")
+
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -9,6 +18,21 @@ plugins {
 }
 
 kotlin {
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    applyDefaultHierarchyTemplate {
+        common {
+            group("mobile") {
+                withIos()
+                withAndroidTarget()
+            }
+
+            group("desktop") {
+                withJvm()
+            }
+        }
+    }
+
+
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -30,58 +54,65 @@ kotlin {
         }
     }
 
+    sourceSets.commonMain.dependencies {
+        implementation(compose.runtime)
+        implementation(compose.foundation)
+        implementation(compose.material)
+        implementation(compose.ui)
+        implementation(compose.components.resources)
+        implementation(compose.material3)
+        implementation(libs.compose.navigation)
+        implementation(libs.compose.viewmodel)
+        implementation(libs.screen.size)
+        implementation(libs.kotlin.coroutine)
+        implementation(libs.sqldelight.runtime)
+        implementation(libs.kamel)
+        implementation(libs.shimmer)
+        implementation(libs.settings)
+        implementation(projects.uikit)
+
+        with(libs.ktor) {
+            implementation(core)
+            implementation(content.negotiation)
+            implementation(serialization)
+        }
+        with(libs.koin) {
+            implementation(core)
+            implementation(compose)
+        }
+    }
+
+    sourceSets.androidMain.dependencies {
+        implementation(libs.compose.ui.tooling.preview)
+        implementation(libs.androidx.activity.compose)
+        implementation(libs.ktor.client.okhttp)
+        implementation(libs.sqldelight.android)
+        implementation(libs.koin.android)
+    }
+
     sourceSets {
-        val desktopMain by getting
-
-        commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.material3)
-            implementation(libs.compose.navigation)
-            implementation(libs.compose.viewmodel)
-            implementation(libs.screen.size)
-            implementation(libs.kotlin.coroutine)
-            implementation(libs.sqldelight.runtime)
-            implementation(libs.kamel)
-            implementation(libs.shimmer)
-            implementation(libs.settings)
-            implementation(projects.uikit)
-
-            with(libs.ktor) {
-                implementation(core)
-                implementation(content.negotiation)
-                implementation(serialization)
-            }
-            with(libs.koin) {
-                implementation(core)
-                implementation(compose)
+        val mobileMain by getting {
+            dependencies {
+                implementation("network.chaintech:compose-multiplatform-media-player:1.0.5")
             }
         }
 
-        androidMain.dependencies {
-            implementation(libs.compose.ui.tooling.preview)
-            implementation(libs.androidx.activity.compose)
-            implementation(libs.ktor.client.okhttp)
-            implementation(libs.sqldelight.android)
-            implementation(libs.koin.android)
+        val iosMain by getting {
+            dependsOn(mobileMain)
+            dependencies {
+                implementation(libs.ktor.client.darwin)
+                implementation(libs.sqldelight.native)
+                implementation(libs.touchlab)
+            }
         }
+    }
 
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
-            implementation(libs.sqldelight.native)
-            implementation(libs.touchlab)
-        }
-
-        desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.ktor.client.okhttp)
-            implementation(libs.sqldelight.sqlite)
-            implementation(libs.kotlinx.coroutines.swing)
-            implementation("uk.co.caprica:vlcj:4.7.0")
-        }
+    sourceSets.desktopMain.dependencies {
+        implementation(compose.desktop.currentOs)
+        implementation(libs.ktor.client.okhttp)
+        implementation(libs.sqldelight.sqlite)
+        implementation(libs.kotlinx.coroutines.swing)
+        implementation("uk.co.caprica:vlcj:4.7.0")
     }
 }
 

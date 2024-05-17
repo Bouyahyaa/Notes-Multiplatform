@@ -24,8 +24,7 @@ actual fun VideoPlayer(modifier: Modifier, url: String) {
     Column {
         VideoPlayerImpl(
             url = url,
-            modifier = Modifier.fillMaxWidth()
-                .height(400.dp)
+            modifier = modifier
         )
     }
 }

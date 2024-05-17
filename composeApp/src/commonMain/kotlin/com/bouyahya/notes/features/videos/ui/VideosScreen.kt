@@ -30,7 +30,8 @@ fun VideosScreen(
             VideoItem(
                 video = video,
                 onVideoChange = {
-                    viewModel.onEvent(VideosEvent.ChangeVideo(video))
+                    if (video.id != state.chosenVideo.id)
+                        viewModel.onEvent(VideosEvent.ChangeVideo(video))
                 },
             )
 
