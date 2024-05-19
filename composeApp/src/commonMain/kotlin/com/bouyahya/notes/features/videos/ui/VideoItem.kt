@@ -1,6 +1,7 @@
 package com.bouyahya.notes.features.videos.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicText
@@ -22,12 +23,16 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun VideoItem(
     video: Video,
+    selected: Boolean,
     onVideoChange: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
+            .background(
+                color = if (selected) Color.LightGray else Color.Transparent
+            )
+            .clickable(enabled = !selected) {
                 onVideoChange()
             }
             .padding(8.dp),

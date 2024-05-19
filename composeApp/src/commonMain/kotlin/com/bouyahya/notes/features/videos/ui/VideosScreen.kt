@@ -24,12 +24,11 @@ fun VideosScreen(
         state.videos.forEach { video ->
             VideoItem(
                 video = video,
+                selected = video.id == state.chosenVideo.id,
                 onVideoChange = {
-                    if (video.id != state.chosenVideo.id)
-                        viewModel.onEvent(VideosEvent.ChangeVideo(video))
+                    viewModel.onEvent(VideosEvent.ChangeVideo(video))
                 },
             )
-
             HorizontalDivider()
         }
     }
