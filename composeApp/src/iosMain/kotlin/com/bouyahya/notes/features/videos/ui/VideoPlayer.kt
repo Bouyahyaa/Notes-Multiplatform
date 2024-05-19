@@ -1,5 +1,6 @@
 package com.bouyahya.notes.features.videos.ui
 
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -8,23 +9,19 @@ import chaintech.videoplayer.ui.VideoPlayerView
 import chaintech.videoplayer.model.PlayerConfig
 
 @Composable
-actual fun VideoPlayer(
-    modifier: Modifier,
-    url: String
-) {
+actual fun VideoPlayer(url: String) {
     VideoPlayerView(
-        modifier = modifier,
+        modifier = Modifier.fillMaxWidth()
+            .height(400.dp),
         url = url,
         playerConfig = PlayerConfig(
             enablePauseResume = true,
-            showSeekBar = false,
+            showSeekBar = true,
             showDuration = true,
             thumbColor = Color.Red,
             activeTrackColor = Color.Red,
             inactiveTrackColor = Color.White,
             textColor = Color.White,
-            seekBarBottomPadding = 8.dp,
-            pauseResumeIconSize = 32.dp,
             autoHideControl = true,
             controlHideInterval = 5
         )

@@ -6,7 +6,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import org.koin.compose.koinInject
 
 @Composable
@@ -19,12 +18,8 @@ fun VideosScreen(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .fillMaxSize()
-            .padding(10.dp)
     ) {
-        VideoPlayer(
-            modifier = Modifier.height(400.dp),
-            url = state.chosenVideo.url
-        )
+        VideoPlayer(url = state.chosenVideo.url)
 
         state.videos.forEach { video ->
             VideoItem(
