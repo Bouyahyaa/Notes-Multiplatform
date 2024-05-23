@@ -1,6 +1,7 @@
 package com.bouyahya.notes.features.videos.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,8 +19,8 @@ actual fun VideoPlayer(url: String) {
             enablePauseResume = true,
             showSeekBar = true,
             showDuration = true,
-            thumbColor = Color.Red,
-            activeTrackColor = Color.Red,
+            thumbColor =  MaterialTheme.colors.secondaryVariant,
+            activeTrackColor =  MaterialTheme.colors.secondaryVariant,
             inactiveTrackColor = Color.White,
             textColor = Color.White,
             autoHideControl = true,

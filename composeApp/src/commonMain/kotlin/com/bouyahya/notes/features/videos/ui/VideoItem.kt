@@ -1,25 +1,25 @@
 package com.bouyahya.notes.features.videos.ui
 
-import androidx.compose.foundation.Image
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bouyahya.notes.features.videos.domain.Video
-import kotlinproject.composeapp.generated.resources.Res
-import kotlinproject.composeapp.generated.resources.compose_multiplatform
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
+import com.valentinilk.shimmer.shimmer
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun VideoItem(
     video: Video,
@@ -30,7 +30,11 @@ fun VideoItem(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = if (selected) Color.LightGray else Color.Transparent
+                color = if (selected)
+                    MaterialTheme.colors.secondaryVariant.copy(
+                        alpha = 0.5F
+                    ) else
+                    Color.Transparent,
             )
             .clickable(enabled = !selected) {
                 onVideoChange()
@@ -38,14 +42,34 @@ fun VideoItem(
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(Res.drawable.compose_multiplatform),
-            contentDescription = null,
+        KamelImage(
+            resource = asyncPainterResource(video.thumbnail),
+            animationSpec = tween(),
+            onLoading = { _ ->
+                Box(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(64.dp)
+                        .shimmer(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .size(64.dp)
+                            .background(Color.Gray)
+                    )
+                }
+            },
+            contentScale = ContentScale.Crop,
+            contentDescription = "Video thumbnail",
             modifier = Modifier
+                .clip(CircleShape)
                 .size(64.dp)
-                .padding(end = 8.dp),
-            contentScale = ContentScale.Crop
         )
+
+        Spacer(modifier = Modifier.width(10.dp))
+
         Column {
             BasicText(
                 text = video.title,

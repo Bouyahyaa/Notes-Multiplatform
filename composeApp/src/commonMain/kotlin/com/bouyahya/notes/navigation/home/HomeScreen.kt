@@ -5,9 +5,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -48,10 +50,11 @@ fun HomeScreen(
     LaunchedEffect(Unit) {
         if (!getPlatform().name.contains("Java"))
             items.add(
+                1,
                 NavigationItem(
                     title = "Videos",
-                    selectedIcon = Icons.Filled.Settings,
-                    unselectedIcon = Icons.Outlined.Settings,
+                    selectedIcon = Icons.Filled.Share,
+                    unselectedIcon = Icons.Outlined.Share,
                     route = HomeScreenRoute.Videos.route,
                 )
             )
