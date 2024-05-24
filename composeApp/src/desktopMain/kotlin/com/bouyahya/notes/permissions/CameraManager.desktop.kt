@@ -1,10 +1,17 @@
 package com.bouyahya.notes.permissions
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 
 @Composable
 actual fun rememberCameraManager(onResult: (SharedImage?) -> Unit): CameraManager {
-    throw NotImplementedError("RememberCameraManager is not implemented")
+    return remember {
+        CameraManager(
+            onLaunch = {
+                println("CameraManager is not implemented")
+            }
+        )
+    }
 }
 
 actual class CameraManager actual constructor(

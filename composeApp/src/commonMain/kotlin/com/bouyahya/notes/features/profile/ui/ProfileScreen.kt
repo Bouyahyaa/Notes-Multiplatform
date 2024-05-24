@@ -21,7 +21,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bouyahya.notes.features.profile.ui.components.ProfileShimmer
-import com.bouyahya.notes.getPlatform
 import com.bouyahya.notes.navigation.Graph
 import com.bouyahya.notes.navigation.LocalNavController
 import com.bouyahya.notes.permissions.shared.SharedManager
@@ -40,16 +39,15 @@ fun ProfileScreen(
     var imageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
     var imageSourceOptionDialog by remember { mutableStateOf(value = false) }
 
-    if (!getPlatform().name.contains("Java"))
-        SharedManager(
-            imageSourceOptionDialog = imageSourceOptionDialog,
-            onChangeImageBitmap = {
-                imageBitmap = it
-            },
-            onChangeImageSourceOptionDialog = {
-                imageSourceOptionDialog = it
-            }
-        )
+    SharedManager(
+        imageSourceOptionDialog = imageSourceOptionDialog,
+        onChangeImageBitmap = {
+            imageBitmap = it
+        },
+        onChangeImageSourceOptionDialog = {
+            imageSourceOptionDialog = it
+        }
+    )
 
     Box(
         modifier = Modifier
@@ -108,7 +106,9 @@ fun ProfileScreen(
                     )
                 else
                     KamelImage(
-                        resource = asyncPainterResource(state.picture?.url ?: "https://placekitten.com/200/200"),
+                        resource = asyncPainterResource(
+                            state.picture?.url ?: "https://placekitten.com/200/200"
+                        ),
                         animationSpec = tween(),
                         onLoading = { _ ->
                             Box(

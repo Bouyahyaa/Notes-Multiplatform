@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.bouyahya.notes.getPlatform
 import kotlinproject.composeapp.generated.resources.Res
 import kotlinproject.composeapp.generated.resources.ic_camera
 import kotlinproject.composeapp.generated.resources.ic_images
@@ -58,21 +59,24 @@ fun ImageSourceOptionDialog(
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(10.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 15.dp).clickable {
-                    onCameraRequest.invoke()
-                },
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Icon(
-                    tint = MaterialTheme.colors.onSurface,
-                    modifier = Modifier.size(25.dp),
-                    painter = painterResource(Res.drawable.ic_camera),
-                    contentDescription = null
-                )
-                Text(text = "Camera", color = MaterialTheme.colors.onSurface)
-            }
+            
+            if (!getPlatform().name.contains("Java"))
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 15.dp).clickable {
+                        onCameraRequest.invoke()
+                    },
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Icon(
+                        tint = MaterialTheme.colors.onSurface,
+                        modifier = Modifier.size(25.dp),
+                        painter = painterResource(Res.drawable.ic_camera),
+                        contentDescription = null
+                    )
+                    Text(text = "Camera", color = MaterialTheme.colors.onSurface)
+                }
+
             Row(
                 modifier = Modifier.fillMaxWidth().padding(vertical = 15.dp).clickable {
                     onGalleryRequest.invoke()

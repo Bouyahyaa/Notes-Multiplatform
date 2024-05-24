@@ -27,6 +27,8 @@ settings = "1.1.1"
 compose-navigation = "2.8.0-alpha02"
 compose-lifecycle = "2.8.0-beta01"
 accompanist-permissions = "0.32.0"
+chaintech = "1.0.5"
+calf = "0.4.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -66,6 +68,8 @@ kamel = { module = "media.kamel:kamel-image", version.ref = "kamel" }
 shimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version.ref = "shimmer" }
 settings = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "settings" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist-permissions" }
+chaintech-player = { module = "network.chaintech:compose-multiplatform-media-player", version.ref = "chaintech" }
+calf-filepicker = { module = "com.mohamedrejeb.calf:calf-file-picker", version.ref = "calf" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

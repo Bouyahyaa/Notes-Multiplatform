@@ -13,7 +13,7 @@ import platform.UIKit.UIImageJPEGRepresentation
 
 actual class SharedImage(private val image: UIImage?) {
     @OptIn(ExperimentalForeignApi::class)
-    actual fun toByteArray(): ByteArray? {
+    actual suspend fun toByteArray(): ByteArray? {
         return if (image != null) {
             val imageData = UIImageJPEGRepresentation(image, COMPRESSION_QUALITY)
                 ?: throw IllegalArgumentException("image data is null")
@@ -28,7 +28,7 @@ actual class SharedImage(private val image: UIImage?) {
 
     }
 
-    actual fun toImageBitmap(): ImageBitmap? {
+    actual suspend fun toImageBitmap(): ImageBitmap? {
         val byteArray = toByteArray()
         return if (byteArray != null) {
             Image.makeFromEncoded(byteArray).toComposeImageBitmap()

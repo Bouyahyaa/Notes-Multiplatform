@@ -11,17 +11,16 @@ actual class PermissionsManager actual constructor(private val callback: Permiss
     PermissionHandler {
     @Composable
     override fun askPermission(permission: PermissionType) {
-        throw NotImplementedError("RememberCameraManager is not implemented")
+        println("Desktop access without permission")
     }
 
     @Composable
     override fun isPermissionGranted(permission: PermissionType): Boolean {
-        throw NotImplementedError("RememberCameraManager is not implemented")
-
+        return true
     }
 
     @Composable
     override fun launchSettings() {
-        throw NotImplementedError("RememberCameraManager is not implemented")
+        println("launchSettings is not required for desktop")
     }
 }

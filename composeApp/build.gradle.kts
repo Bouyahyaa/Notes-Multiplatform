@@ -94,7 +94,7 @@ kotlin {
     sourceSets {
         val mobileMain by getting {
             dependencies {
-                implementation("network.chaintech:compose-multiplatform-media-player:1.0.5")
+                implementation(libs.chaintech.player)
             }
         }
 
@@ -113,6 +113,7 @@ kotlin {
         implementation(libs.ktor.client.okhttp)
         implementation(libs.sqldelight.sqlite)
         implementation(libs.kotlinx.coroutines.swing)
+        implementation(libs.calf.filepicker)
         implementation("uk.co.caprica:vlcj:4.7.0")
     }
 }
