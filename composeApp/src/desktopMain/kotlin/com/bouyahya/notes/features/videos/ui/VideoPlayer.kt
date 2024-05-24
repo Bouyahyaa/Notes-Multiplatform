@@ -1,17 +1,8 @@
 package com.bouyahya.notes.features.videos.ui
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.awt.SwingPanel
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery
 import uk.co.caprica.vlcj.player.component.CallbackMediaPlayerComponent
 import uk.co.caprica.vlcj.player.component.EmbeddedMediaPlayerComponent
@@ -20,11 +11,10 @@ import java.util.*
 
 
 @Composable
-actual fun VideoPlayer(modifier: Modifier, url: String) {
+actual fun VideoPlayer(url: String) {
     Column {
         VideoPlayerImpl(
             url = url,
-            modifier = modifier
         )
     }
 }
@@ -32,7 +22,6 @@ actual fun VideoPlayer(modifier: Modifier, url: String) {
 @Composable
 fun VideoPlayerImpl(
     url: String,
-    modifier: Modifier,
 ) {
     Text("VideoPlayer NotImplemented yet for desktop")
 //    val mediaPlayerComponent = remember { initializeMediaPlayerComponent() }
