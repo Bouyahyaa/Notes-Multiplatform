@@ -1,3 +1,13 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+
+val NamedDomainObjectContainer<KotlinSourceSet>.mobileMain: NamedDomainObjectProvider<KotlinSourceSet>
+    get() = named("mobileMain")
+
+val NamedDomainObjectContainer<KotlinSourceSet>.desktopMain: NamedDomainObjectProvider<KotlinSourceSet>
+    get() = named("desktopMain")
+
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.jetbrainsCompose)
@@ -6,6 +16,20 @@ plugins {
 }
 
 kotlin {
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    applyDefaultHierarchyTemplate {
+        common {
+            group("mobile") {
+                withIos()
+                withAndroidTarget()
+            }
+
+            group("desktop") {
+                withJvm()
+            }
+        }
+    }
+
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -29,11 +53,17 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.material3)
         }
+    }
 
-        val desktopMain by getting {
+    sourceSets {
+        val mobileMain by getting {
             dependencies {
-                implementation("uk.co.caprica:vlcj:4.7.0")
+                implementation(libs.chaintech.player)
             }
+        }
+
+        val iosMain by getting {
+            dependsOn(mobileMain)
         }
     }
 }

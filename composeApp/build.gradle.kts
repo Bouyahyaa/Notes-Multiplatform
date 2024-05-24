@@ -1,13 +1,4 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
-
-val NamedDomainObjectContainer<KotlinSourceSet>.mobileMain: NamedDomainObjectProvider<KotlinSourceSet>
-    get() = named("mobileMain")
-
-val NamedDomainObjectContainer<KotlinSourceSet>.desktopMain: NamedDomainObjectProvider<KotlinSourceSet>
-    get() = named("desktopMain")
-
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -18,21 +9,6 @@ plugins {
 }
 
 kotlin {
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-    applyDefaultHierarchyTemplate {
-        common {
-            group("mobile") {
-                withIos()
-                withAndroidTarget()
-            }
-
-            group("desktop") {
-                withJvm()
-            }
-        }
-    }
-
-
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -91,30 +67,23 @@ kotlin {
         implementation(libs.accompanist.permissions)
     }
 
-    sourceSets {
-        val mobileMain by getting {
-            dependencies {
-                implementation(libs.chaintech.player)
-            }
-        }
 
-        val iosMain by getting {
-            dependsOn(mobileMain)
-            dependencies {
-                implementation(libs.ktor.client.darwin)
-                implementation(libs.sqldelight.native)
-                implementation(libs.touchlab)
-            }
-        }
+    sourceSets.iosMain.dependencies {
+        implementation(libs.ktor.client.darwin)
+        implementation(libs.sqldelight.native)
+        implementation(libs.touchlab)
     }
 
-    sourceSets.desktopMain.dependencies {
-        implementation(compose.desktop.currentOs)
-        implementation(libs.ktor.client.okhttp)
-        implementation(libs.sqldelight.sqlite)
-        implementation(libs.kotlinx.coroutines.swing)
-        implementation(libs.calf.filepicker)
-        implementation("uk.co.caprica:vlcj:4.7.0")
+    sourceSets {
+        val desktopMain by getting {
+            dependencies {
+                implementation(compose.desktop.currentOs)
+                implementation(libs.ktor.client.okhttp)
+                implementation(libs.sqldelight.sqlite)
+                implementation(libs.kotlinx.coroutines.swing)
+                implementation(libs.calf.filepicker)
+            }
+        }
     }
 }
 

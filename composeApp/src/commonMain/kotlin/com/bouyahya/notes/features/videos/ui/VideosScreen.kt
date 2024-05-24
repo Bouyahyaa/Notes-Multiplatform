@@ -6,6 +6,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import com.bouyahya.uikit.VideoPlayer
 import org.koin.compose.koinInject
 
 @Composable
