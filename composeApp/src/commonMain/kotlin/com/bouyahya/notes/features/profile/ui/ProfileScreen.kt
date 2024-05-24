@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -36,13 +35,13 @@ fun ProfileScreen(
     val state by viewModel.state.collectAsState()
     val rootNavController = LocalNavController.current
 
-    var imageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
     var imageSourceOptionDialog by remember { mutableStateOf(value = false) }
 
     SharedManager(
         imageSourceOptionDialog = imageSourceOptionDialog,
         onChangeImageBitmap = {
-            imageBitmap = it
+            if (it != null)
+                viewModel.onEvent(ProfileEvent.SetImage(it))
         },
         onChangeImageSourceOptionDialog = {
             imageSourceOptionDialog = it
@@ -92,9 +91,9 @@ fun ProfileScreen(
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier.align(Alignment.Center)
             ) {
-                if (imageBitmap != null)
+                if (state.imageBitmap != null)
                     Image(
-                        bitmap = imageBitmap!!,
+                        bitmap = state.imageBitmap!!,
                         contentDescription = "Profile picture",
                         modifier = Modifier
                             .clip(CircleShape)
@@ -139,7 +138,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = state.picture?.username ?: "John Doe",
+                    text = state.picture?.username ?: "Bilel Bouyahya",
                     style = MaterialTheme.typography.h5,
                     fontWeight = FontWeight.Bold
                 )
@@ -151,6 +150,25 @@ fun ProfileScreen(
                     style = MaterialTheme.typography.subtitle1,
                     color = Color.Gray
                 )
+
+                if (state.picture == null) {
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Button(
+                        onClick = {
+                            viewModel.onEvent(ProfileEvent.GetProfile)
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colors.secondaryVariant,
+                        ),
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    ) {
+                        Text(
+                            text = "Get Unsplash Picture",
+                            color = Color.White
+                        )
+                    }
+                }
             }
         }
     }

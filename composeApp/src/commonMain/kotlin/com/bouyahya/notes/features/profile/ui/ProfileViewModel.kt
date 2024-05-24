@@ -21,6 +21,7 @@ class ProfileViewModel(
     fun onEvent(event: ProfileEvent) {
         when (event) {
             is ProfileEvent.GetProfile -> getProfile()
+            is ProfileEvent.SetImage -> setImage(event)
             is ProfileEvent.Logout -> logout()
         }
     }
@@ -37,7 +38,8 @@ class ProfileViewModel(
                 .onSuccess { picture ->
                     state.update {
                         it.copy(
-                            picture = picture
+                            picture = picture,
+                            imageBitmap = null
                         )
                     }
                 }.onFailure {
@@ -53,6 +55,15 @@ class ProfileViewModel(
                     isLoading = false
                 )
             }
+        }
+    }
+
+    private fun setImage(event: ProfileEvent.SetImage) {
+        state.update {
+            it.copy(
+                imageBitmap = event.imageBitmap,
+                picture = null
+            )
         }
     }
 
