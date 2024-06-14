@@ -5,6 +5,7 @@ import com.bouyahya.notes.core.network.networkModule
 import com.bouyahya.notes.features.auth.di.authModule
 import com.bouyahya.notes.features.notes.di.noteModule
 import com.bouyahya.notes.features.profile.di.profileModule
+import com.bouyahya.notes.features.videos.di.videoModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 
@@ -15,6 +16,7 @@ fun initKoin(enableNetworkLogs: Boolean = false, appDeclaration: KoinAppDeclarat
             networkModule(enableNetworkLogs),
             databaseModule,
             profileModule,
+            videoModule,
             noteModule,
             authModule
         )

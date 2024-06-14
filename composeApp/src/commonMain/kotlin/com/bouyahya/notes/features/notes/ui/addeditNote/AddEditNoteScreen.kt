@@ -65,7 +65,7 @@ fun AddEditNoteScreen(
     }
 
     LaunchedEffect(Unit) {
-        if (noteId != -1L)
+        if (noteId.toInt() != -1)
             viewModel.onEvent(AddEditNoteEvent.GetNote(noteId))
     }
 
@@ -154,7 +154,7 @@ fun AddEditNoteScreen(
                     .height(50.dp)
             ) {
                 Text(
-                    text = if (noteId != -1L)
+                    text = if (noteId.toInt() != -1)
                         "Edit Note" else
                         "Add note",
                     color = Color.White

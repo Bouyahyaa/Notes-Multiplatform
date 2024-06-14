@@ -1,4 +1,3 @@
-import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
@@ -31,56 +30,59 @@ kotlin {
         }
     }
 
+    sourceSets.commonMain.dependencies {
+        implementation(compose.runtime)
+        implementation(compose.foundation)
+        implementation(compose.material)
+        implementation(compose.ui)
+        implementation(compose.components.resources)
+        implementation(compose.material3)
+        implementation(libs.compose.navigation)
+        implementation(libs.compose.viewmodel)
+        implementation(libs.screen.size)
+        implementation(libs.kotlin.coroutine)
+        implementation(libs.sqldelight.runtime)
+        implementation(libs.kamel)
+        implementation(libs.shimmer)
+        implementation(libs.settings)
+        implementation(projects.uikit)
+
+        with(libs.ktor) {
+            implementation(core)
+            implementation(content.negotiation)
+            implementation(serialization)
+        }
+        with(libs.koin) {
+            implementation(core)
+            implementation(compose)
+        }
+    }
+
+    sourceSets.androidMain.dependencies {
+        implementation(libs.compose.ui.tooling.preview)
+        implementation(libs.androidx.activity.compose)
+        implementation(libs.ktor.client.okhttp)
+        implementation(libs.sqldelight.android)
+        implementation(libs.koin.android)
+        implementation(libs.accompanist.permissions)
+    }
+
+
+    sourceSets.iosMain.dependencies {
+        implementation(libs.ktor.client.darwin)
+        implementation(libs.sqldelight.native)
+        implementation(libs.touchlab)
+    }
+
     sourceSets {
-        val desktopMain by getting
-
-        commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.material3)
-            implementation(libs.compose.navigation)
-            implementation(libs.compose.viewmodel)
-            implementation(libs.screen.size)
-            implementation(libs.kotlin.coroutine)
-            implementation(libs.sqldelight.runtime)
-            implementation(libs.kamel)
-            implementation(libs.shimmer)
-            implementation(libs.settings)
-            implementation(projects.uikit)
-
-            with(libs.ktor) {
-                implementation(core)
-                implementation(content.negotiation)
-                implementation(serialization)
+        val desktopMain by getting {
+            dependencies {
+                implementation(compose.desktop.currentOs)
+                implementation(libs.ktor.client.okhttp)
+                implementation(libs.sqldelight.sqlite)
+                implementation(libs.kotlinx.coroutines.swing)
+                implementation(libs.calf.filepicker)
             }
-            with(libs.koin) {
-                implementation(core)
-                implementation(compose)
-            }
-        }
-
-        androidMain.dependencies {
-            implementation(libs.compose.ui.tooling.preview)
-            implementation(libs.androidx.activity.compose)
-            implementation(libs.ktor.client.okhttp)
-            implementation(libs.sqldelight.android)
-            implementation(libs.koin.android)
-        }
-
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
-            implementation(libs.sqldelight.native)
-            implementation(libs.touchlab)
-        }
-
-        desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.ktor.client.okhttp)
-            implementation(libs.sqldelight.sqlite)
-            implementation(libs.kotlinx.coroutines.swing)
         }
     }
 }

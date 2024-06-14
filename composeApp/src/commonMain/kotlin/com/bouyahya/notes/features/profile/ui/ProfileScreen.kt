@@ -1,17 +1,16 @@
 package com.bouyahya.notes.features.profile.ui
 
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.bouyahya.notes.features.profile.ui.components.ProfileShimmer
 import com.bouyahya.notes.navigation.Graph
 import com.bouyahya.notes.navigation.LocalNavController
+import com.bouyahya.notes.permissions.shared.SharedManager
 import com.valentinilk.shimmer.shimmer
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
@@ -35,9 +35,18 @@ fun ProfileScreen(
     val state by viewModel.state.collectAsState()
     val rootNavController = LocalNavController.current
 
-    LaunchedEffect(Unit) {
-        viewModel.onEvent(ProfileEvent.GetProfile)
-    }
+    var imageSourceOptionDialog by remember { mutableStateOf(value = false) }
+
+    SharedManager(
+        imageSourceOptionDialog = imageSourceOptionDialog,
+        onChangeImageBitmap = {
+            if (it != null)
+                viewModel.onEvent(ProfileEvent.SetImage(it))
+        },
+        onChangeImageSourceOptionDialog = {
+            imageSourceOptionDialog = it
+        }
+    )
 
     Box(
         modifier = Modifier
@@ -82,36 +91,54 @@ fun ProfileScreen(
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier.align(Alignment.Center)
             ) {
-                KamelImage(
-                    resource = asyncPainterResource(state.picture?.url ?: "https://placekitten.com/200/200"),
-                    animationSpec = tween(),
-                    onLoading = { _ ->
-                        Box(
-                            modifier = Modifier
-                                .clip(CircleShape)
-                                .size(100.dp)
-                                .shimmer(),
-                            contentAlignment = Alignment.Center
-                        ) {
+                if (state.imageBitmap != null)
+                    Image(
+                        bitmap = state.imageBitmap!!,
+                        contentDescription = "Profile picture",
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .size(100.dp)
+                            .clickable {
+                                imageSourceOptionDialog = true
+                            },
+                        contentScale = ContentScale.Crop
+                    )
+                else
+                    KamelImage(
+                        resource = asyncPainterResource(
+                            state.picture?.url ?: "https://placekitten.com/200/200"
+                        ),
+                        animationSpec = tween(),
+                        onLoading = { _ ->
                             Box(
                                 modifier = Modifier
                                     .clip(CircleShape)
                                     .size(100.dp)
-                                    .background(Color.Gray)
-                            )
-                        }
-                    },
-                    contentScale = ContentScale.Crop,
-                    contentDescription = "Profile picture",
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .size(100.dp)
-                )
+                                    .shimmer(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .clip(CircleShape)
+                                        .size(100.dp)
+                                        .background(Color.Gray)
+                                )
+                            }
+                        },
+                        contentScale = ContentScale.Crop,
+                        contentDescription = "Profile picture",
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .size(100.dp)
+                            .clickable {
+                                imageSourceOptionDialog = true
+                            }
+                    )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = state.picture?.username ?: "John Doe",
+                    text = state.picture?.username ?: "Bilel Bouyahya",
                     style = MaterialTheme.typography.h5,
                     fontWeight = FontWeight.Bold
                 )
@@ -123,6 +150,25 @@ fun ProfileScreen(
                     style = MaterialTheme.typography.subtitle1,
                     color = Color.Gray
                 )
+
+                if (state.picture == null) {
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Button(
+                        onClick = {
+                            viewModel.onEvent(ProfileEvent.GetProfile)
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colors.secondaryVariant,
+                        ),
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    ) {
+                        Text(
+                            text = "Get Unsplash Picture",
+                            color = Color.White
+                        )
+                    }
+                }
             }
         }
     }
