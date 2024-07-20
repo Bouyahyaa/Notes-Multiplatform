@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.sqldelight)
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -40,12 +41,14 @@ kotlin {
         implementation(libs.compose.navigation)
         implementation(libs.compose.viewmodel)
         implementation(libs.screen.size)
-        implementation(libs.kotlin.coroutine)
         implementation(libs.sqldelight.runtime)
         implementation(libs.kamel)
         implementation(libs.shimmer)
         implementation(libs.settings)
         implementation(projects.uikit)
+        api(libs.kotlinx.coroutines.core)
+        api(libs.kotlinx.coroutines.test)
+
 
         with(libs.ktor) {
             implementation(core)
@@ -59,7 +62,6 @@ kotlin {
     }
 
     sourceSets.androidMain.dependencies {
-        implementation(libs.compose.ui.tooling.preview)
         implementation(libs.androidx.activity.compose)
         implementation(libs.ktor.client.okhttp)
         implementation(libs.sqldelight.android)
@@ -84,6 +86,14 @@ kotlin {
                 implementation(libs.calf.filepicker)
             }
         }
+    }
+
+    sourceSets.commonTest.dependencies {
+        implementation(libs.kotlin.test)
+        implementation(kotlin("test-annotations-common"))
+        implementation(libs.assertk)
+        implementation(libs.ktor.client.mock)
+        implementation(libs.koin.test)
     }
 }
 
@@ -116,9 +126,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    dependencies {
-        debugImplementation(libs.compose.ui.tooling)
-    }
+    dependencies {}
 }
 
 compose.desktop {
