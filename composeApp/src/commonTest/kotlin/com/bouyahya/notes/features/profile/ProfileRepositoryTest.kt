@@ -1,4 +1,4 @@
-package com.bouyahya.notes
+package com.bouyahya.notes.features.profile
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo

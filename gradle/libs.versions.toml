@@ -30,6 +30,7 @@ accompanist-permissions = "0.32.0"
 chaintech = "1.0.5"
 calf = "0.4.1"
 assertk = "0.28.1"
+mokkery = "1.9.24-1.7.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -73,9 +74,11 @@ accompanist-permissions = { module = "com.google.accompanist:accompanist-permiss
 chaintech-player = { module = "network.chaintech:compose-multiplatform-media-player", version.ref = "chaintech" }
 calf-filepicker = { module = "com.mohamedrejeb.calf:calf-file-picker", version.ref = "calf" }
 assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
+mokkery = { module = "dev.mokkery:mokkery-gradle", version.ref = "mokkery" }
 
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+mokkery = { id = "dev.mokkery", version.ref = "mokkery" }
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqlDelightVersion" }
