@@ -106,6 +106,12 @@ kotlin {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("androidx.compose.material:material-ripple:1.7.0-alpha05")
+    }
+}
+
 android {
     namespace = "com.bouyahya.notes"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
