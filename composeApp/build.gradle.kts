@@ -96,6 +96,14 @@ kotlin {
         implementation(libs.ktor.client.mock)
         implementation(libs.koin.test)
     }
+
+    val androidTest = sourceSets.getByName("androidUnitTest") {
+        dependencies {
+            implementation(kotlin("test-junit"))
+            implementation(libs.junit)
+            implementation(libs.sqldelight.sqlite)
+        }
+    }
 }
 
 android {
