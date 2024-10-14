@@ -68,6 +68,6 @@ class ProfileViewModel(
     }
 
     private fun logout() {
-        settings.clear()
+        settings.remove("token")
     }
 }

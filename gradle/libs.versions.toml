@@ -31,6 +31,9 @@ chaintech = "1.0.5"
 calf = "0.4.1"
 assertk = "0.28.1"
 mokkery = "1.9.24-1.7.0"
+gservices = "4.4.2"
+firebaseBom = "33.4.0"
+notifier = "1.3.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -75,6 +78,10 @@ chaintech-player = { module = "network.chaintech:compose-multiplatform-media-pla
 calf-filepicker = { module = "com.mohamedrejeb.calf:calf-file-picker", version.ref = "calf" }
 assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
 mokkery = { module = "dev.mokkery:mokkery-gradle", version.ref = "mokkery" }
+kmp-notifier = { module = "io.github.mirzemehdi:kmpnotifier", version.ref = "notifier" }
+
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
 
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
@@ -85,3 +92,4 @@ sqldelight = { id = "app.cash.sqldelight", version.ref = "sqlDelightVersion" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "gservices" }

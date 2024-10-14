@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "326824405257",
+    "project_id": "notes-multiplatfrom",
+    "storage_bucket": "notes-multiplatfrom.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:326824405257:android:a203b928b5313417f60bd8",
+        "android_client_info": {
+          "package_name": "com.bouyahya.notes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6J2VyIgZVCY4OOfhuvFl7bXTPmJWDc_s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

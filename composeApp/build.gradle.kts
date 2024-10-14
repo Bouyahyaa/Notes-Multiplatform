@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.sqldelight)
     alias(libs.plugins.ksp)
     alias(libs.plugins.mokkery)
+    alias(libs.plugins.googleServices)
 }
 
 kotlin {
@@ -27,6 +28,8 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
+            export(libs.kmp.notifier)
+
             baseName = "ComposeApp"
             isStatic = false
         }
@@ -47,9 +50,10 @@ kotlin {
         implementation(libs.shimmer)
         implementation(libs.settings)
         implementation(projects.uikit)
+
         api(libs.kotlinx.coroutines.core)
         api(libs.kotlinx.coroutines.test)
-
+        api(libs.kmp.notifier) // in iOS export this library
 
         with(libs.ktor) {
             implementation(core)
@@ -68,6 +72,9 @@ kotlin {
         implementation(libs.sqldelight.android)
         implementation(libs.koin.android)
         implementation(libs.accompanist.permissions)
+
+        implementation(project.dependencies.platform(libs.firebase.bom))
+        implementation(libs.firebase.messaging)
     }
 
 
