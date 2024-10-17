@@ -28,6 +28,11 @@ fun initKoin(enableNetworkLogs: Boolean = false, appDeclaration: KoinAppDeclarat
 
 private fun KoinApplication.onApplicationStart() {
     NotifierManager.addListener(object : NotifierManager.Listener {
+        override fun onPushNotification(title: String?, body: String?) {
+            super.onPushNotification(title, body)
+            println("onPushNotificationStart: $title $body")
+        }
+
         override fun onPayloadData(data: PayloadData) {
             super.onPayloadData(data)
             println("PayloadDataOnApplicationStart: $data")
