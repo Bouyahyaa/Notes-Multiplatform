@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.mokkery)
     alias(libs.plugins.googleServices)
+    alias(libs.plugins.compose.compiler)
 }
 
 kotlin {

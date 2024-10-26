@@ -10,4 +10,5 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.mokkery) apply false
     alias(libs.plugins.googleServices) apply false
+    alias(libs.plugins.compose.compiler) apply false
 }
