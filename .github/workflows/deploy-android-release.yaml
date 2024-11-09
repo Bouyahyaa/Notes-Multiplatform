@@ -29,7 +29,7 @@ jobs:
         with:
           path: |
             ~/.konan
-            key: ${{ runner.os }}-${{ hashFiles('**/.lock') }}
+          key: ${{ runner.os }}-v1-${{ hashFiles('*.versions.toml') }}
 
       - name: Version Bump
         uses: chkfung/android-version-actions@v1.2.3
