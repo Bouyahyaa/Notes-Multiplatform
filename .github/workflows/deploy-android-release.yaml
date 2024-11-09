@@ -40,7 +40,7 @@ jobs:
       - name: Sign Release
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: app/build/outputs/bundle/release
+          releaseDirectory: composeApp/build/outputs/bundle/release
           signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE }}
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           alias: ${{ secrets.ALIAS }}
@@ -54,6 +54,6 @@ jobs:
         with:
           serviceAccountJson: service_account.json
           packageName: com.bouyahya.notes
-          releaseFiles: app/build/outputs/bundle/release/composeApp-release.aab
+          releaseFiles: composeApp/build/outputs/bundle/release/composeApp-release.aab
           track: 'alpha'
           status: 'completed'
